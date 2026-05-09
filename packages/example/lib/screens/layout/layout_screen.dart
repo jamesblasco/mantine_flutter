@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import '../shared.dart';
+import 'sections/app_shell_section.dart';
 import 'sections/card_section.dart';
 import 'sections/group_section.dart';
 import 'sections/mantine_box_section.dart';
@@ -20,6 +21,7 @@ class LayoutScreen extends StatelessWidget {
         GallerySection(title: 'MantineGroup', child: GroupSection()),
         GallerySection(title: 'MantinePaper', child: PaperSection()),
         GallerySection(title: 'Card', child: CardSection()),
+        GallerySection(title: 'AppShell', child: AppShellSection()),
       ],
     );
   }
