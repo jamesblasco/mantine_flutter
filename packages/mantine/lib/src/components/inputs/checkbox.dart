@@ -1,14 +1,16 @@
 import 'package:flutter/widgets.dart';
 import '../../foundation/size.dart';
 import '../../theme/context_extensions.dart';
+import '../../utils/uncontrolled.dart';
 
 enum MantineLabelPosition { left, right }
 
 class MantineCheckbox extends StatefulWidget {
   const MantineCheckbox({
     super.key,
-    required this.checked,
-    required this.onChanged,
+    this.checked,
+    this.defaultChecked,
+    this.onChanged,
     this.label,
     this.description,
     this.color,
@@ -19,7 +21,8 @@ class MantineCheckbox extends StatefulWidget {
     this.labelPosition = MantineLabelPosition.right,
   });
 
-  final bool checked;
+  final bool? checked;
+  final bool? defaultChecked;
   final ValueChanged<bool>? onChanged;
   final String? label;
   final String? description;
@@ -35,11 +38,33 @@ class MantineCheckbox extends StatefulWidget {
 }
 
 class _MantineCheckboxState extends State<MantineCheckbox> {
+  late final MantineUncontrolled<bool> _state;
   bool _hovered = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _state = MantineUncontrolled<bool>(
+      value: widget.checked,
+      defaultValue: widget.defaultChecked,
+      finalValue: false,
+      onChanged: widget.onChanged,
+    );
+  }
+
+  @override
+  void didUpdateWidget(MantineCheckbox oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _state.update(
+      value: widget.checked,
+      onChanged: widget.onChanged,
+    );
+  }
+
   void _toggle() {
-    if (!widget.disabled && widget.onChanged != null) {
-      widget.onChanged!(!widget.checked);
+    if (!widget.disabled) {
+      _state.handleChange(!_state.currentValue);
+      setState(() {});
     }
   }
 
@@ -79,10 +104,10 @@ class _MantineCheckboxState extends State<MantineCheckbox> {
         child: CustomPaint(
           size: Size(px, px),
           painter: _CheckboxPainter(
-            checked: widget.checked || widget.indeterminate,
+            checked: _state.currentValue || widget.indeterminate,
             indeterminate: widget.indeterminate,
             color: colorScale[theme.primaryShade],
-            borderColor: (widget.checked || widget.indeterminate || _hovered)
+            borderColor: (_state.currentValue || widget.indeterminate || _hovered)
                 ? colorScale[theme.primaryShade]
                 : context.mantineBorder,
             radius: resolvedRadius,

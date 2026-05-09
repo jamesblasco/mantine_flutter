@@ -18,6 +18,7 @@ export 'src/utils/local_storage.dart';
 export 'src/utils/hotkeys.dart';
 export 'src/utils/timeout.dart';
 export 'src/utils/debounced.dart';
+export 'src/utils/uncontrolled.dart';
 
 // Theme
 export 'src/theme/mantine_theme_data.dart';

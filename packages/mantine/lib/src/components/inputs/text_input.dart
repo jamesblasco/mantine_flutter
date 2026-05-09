@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import '../../foundation/size.dart';
 import '../../theme/context_extensions.dart';
+import '../../utils/uncontrolled.dart';
 
 enum MantineInputVariant { default_, filled, unstyled }
 
@@ -12,6 +13,7 @@ class MantineTextInput extends StatefulWidget {
     this.error,
     this.placeholder,
     this.value,
+    this.defaultValue,
     this.onChanged,
     this.controller,
     this.focusNode,
@@ -34,6 +36,7 @@ class MantineTextInput extends StatefulWidget {
   final String? error;
   final String? placeholder;
   final String? value;
+  final String? defaultValue;
   final ValueChanged<String>? onChanged;
   final TextEditingController? controller;
   final FocusNode? focusNode;
@@ -55,6 +58,7 @@ class MantineTextInput extends StatefulWidget {
 }
 
 class _MantineTextInputState extends State<MantineTextInput> {
+  late final MantineUncontrolled<String> _state;
   late TextEditingController _controller;
   late FocusNode _focusNode;
   bool _focused = false;
@@ -64,8 +68,15 @@ class _MantineTextInputState extends State<MantineTextInput> {
   @override
   void initState() {
     super.initState();
+    _state = MantineUncontrolled<String>(
+      value: widget.value,
+      defaultValue: widget.defaultValue,
+      finalValue: '',
+      onChanged: widget.onChanged,
+    );
+
     if (widget.controller == null) {
-      _controller = TextEditingController(text: widget.value);
+      _controller = TextEditingController(text: _state.currentValue);
       _ownsController = true;
     } else {
       _controller = widget.controller!;
@@ -86,8 +97,13 @@ class _MantineTextInputState extends State<MantineTextInput> {
   @override
   void didUpdateWidget(MantineTextInput old) {
     super.didUpdateWidget(old);
-    if (widget.value != null && widget.value != _controller.text) {
-      _controller.text = widget.value!;
+    _state.update(
+      value: widget.value,
+      onChanged: widget.onChanged,
+    );
+
+    if (_state.value != null && _state.value != _controller.text) {
+      _controller.text = _state.value!;
     }
   }
 
@@ -172,7 +188,9 @@ class _MantineTextInputState extends State<MantineTextInput> {
               obscureText: widget.obscureText,
               maxLines: widget.obscureText ? 1 : widget.maxLines,
               autofocus: widget.autofocus,
-              onChanged: widget.onChanged,
+              onChanged: (v) {
+                _state.handleChange(v);
+              },
             ),
           ],
         );
