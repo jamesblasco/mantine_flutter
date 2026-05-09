@@ -164,6 +164,7 @@ class _MantineScrollAreaState extends State<MantineScrollArea>
   }
 
   bool _handleScrollNotification(ScrollNotification notification) {
+    // Both vertical (depth 0) and horizontal (depth 1) scrollviews should be handled.
     if (notification.depth > 1) return false;
 
     if (notification is ScrollUpdateNotification ||
