@@ -5,8 +5,10 @@ import 'sections/checkbox_section.dart';
 import 'sections/counter_section.dart';
 import 'sections/debounced_section.dart';
 import 'sections/number_input_section.dart';
+import 'sections/segmented_control_section.dart';
 import 'sections/switch_section.dart';
 import 'sections/text_input_section.dart';
+import 'sections/textarea_section.dart';
 import 'sections/throttled_counter_section.dart';
 
 class InputsScreen extends StatelessWidget {
@@ -19,8 +21,11 @@ class InputsScreen extends StatelessWidget {
       sections: [
         GallerySection(title: 'TextInput', child: TextInputSection()),
         GallerySection(title: 'NumberInput', child: NumberInputSection()),
+        GallerySection(title: 'Textarea', child: TextareaSection()),
         GallerySection(title: 'Checkbox', child: CheckboxSection()),
         GallerySection(title: 'Switch', child: SwitchSection()),
+        GallerySection(
+            title: 'SegmentedControl', child: SegmentedControlSection()),
         GallerySection(
           title: 'Counter (MantineCounter)',
           child: CounterSection(),
