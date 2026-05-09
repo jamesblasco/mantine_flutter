@@ -3,11 +3,10 @@ import '../../foundation/size.dart';
 import '../../theme/context_extensions.dart';
 import '../../utils/uncontrolled.dart';
 import 'input_components.dart';
+import 'text_input.dart' show MantineInputVariant;
 
-enum MantineInputVariant { default_, filled, unstyled }
-
-class MantineTextInput extends StatefulWidget {
-  const MantineTextInput({
+class MantineTextarea extends StatefulWidget {
+  const MantineTextarea({
     super.key,
     this.label,
     this.description,
@@ -25,9 +24,9 @@ class MantineTextInput extends StatefulWidget {
     this.leftSection,
     this.rightSection,
     this.variant = MantineInputVariant.default_,
-    this.inputType = TextInputType.text,
-    this.obscureText = false,
-    this.maxLines = 1,
+    this.autosize = false,
+    this.minRows = 2,
+    this.maxRows,
     this.maxLength,
     this.autofocus = false,
   });
@@ -48,17 +47,17 @@ class MantineTextInput extends StatefulWidget {
   final Widget? leftSection;
   final Widget? rightSection;
   final MantineInputVariant variant;
-  final TextInputType inputType;
-  final bool obscureText;
-  final int? maxLines;
+  final bool autosize;
+  final int minRows;
+  final int? maxRows;
   final int? maxLength;
   final bool autofocus;
 
   @override
-  State<MantineTextInput> createState() => _MantineTextInputState();
+  State<MantineTextarea> createState() => _MantineTextareaState();
 }
 
-class _MantineTextInputState extends State<MantineTextInput> {
+class _MantineTextareaState extends State<MantineTextarea> {
   late final MantineUncontrolled<String> _state;
   late TextEditingController _controller;
   late FocusNode _focusNode;
@@ -96,7 +95,7 @@ class _MantineTextInputState extends State<MantineTextInput> {
   }
 
   @override
-  void didUpdateWidget(MantineTextInput old) {
+  void didUpdateWidget(MantineTextarea old) {
     super.didUpdateWidget(old);
     _state.update(
       value: widget.value,
@@ -157,27 +156,26 @@ class _MantineTextInputState extends State<MantineTextInput> {
       bgColor = bgColor.withValues(alpha: 0.6);
     }
 
+    const lineHeight = 1.55;
     final textStyle = TextStyle(
       fontSize: fontSize,
       color: widget.disabled
           ? context.mantineDimmedText
           : context.mantineBodyText,
       fontFamily: theme.typography.fontFamily,
-      height: 1.55,
+      height: lineHeight,
     );
 
     final hintStyle = textStyle.copyWith(color: context.mantineDimmedText);
 
-    // EditableText is the pure-widgets.dart text input primitive.
-    // We layer a hint Text underneath via Stack.
     Widget editableText = ValueListenableBuilder<TextEditingValue>(
       valueListenable: _controller,
       builder: (context, value, _) {
         return Stack(
-          alignment: Alignment.centerLeft,
+          alignment: Alignment.topLeft,
           children: [
             if (value.text.isEmpty && widget.placeholder != null)
-              Text(widget.placeholder!, style: hintStyle, maxLines: 1),
+              Text(widget.placeholder!, style: hintStyle),
             EditableText(
               controller: _controller,
               focusNode: _focusNode,
@@ -185,9 +183,9 @@ class _MantineTextInputState extends State<MantineTextInput> {
               style: textStyle,
               cursorColor: theme.primaryColorValue,
               backgroundCursorColor: const Color(0xFF888888),
-              keyboardType: widget.inputType,
-              obscureText: widget.obscureText,
-              maxLines: widget.obscureText ? 1 : widget.maxLines,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              maxLength: widget.maxLength,
               autofocus: widget.autofocus,
               onChanged: (v) {
                 _state.handleChange(v);
@@ -198,29 +196,61 @@ class _MantineTextInputState extends State<MantineTextInput> {
       },
     );
 
-    Widget wrapper = DecoratedBox(
-      decoration: widget.variant == MantineInputVariant.unstyled
-          ? const BoxDecoration()
-          : BoxDecoration(
-              color: bgColor,
-              borderRadius: BorderRadius.circular(resolvedRadius),
-              border: Border.all(
-                  color: borderColor, width: _focused ? 1.5 : 1),
-            ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        child: Row(
-          children: [
-            if (widget.leftSection != null) ...[
-              widget.leftSection!,
-              const SizedBox(width: 8),
+    final singleLineHeight = fontSize * lineHeight;
+    if (widget.autosize) {
+      editableText = IntrinsicHeight(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: widget.minRows * singleLineHeight,
+                maxHeight: widget.maxRows != null
+                    ? widget.maxRows! * singleLineHeight
+                    : double.infinity,
+              ),
+              child: editableText,
+            );
+          },
+        ),
+      );
+    } else {
+      editableText = SizedBox(
+        height: widget.minRows * singleLineHeight,
+        child: editableText,
+      );
+    }
+
+    Widget wrapper = GestureDetector(
+      onTap: () {
+        if (!widget.disabled && !_focusNode.hasFocus) {
+          _focusNode.requestFocus();
+        }
+      },
+      child: DecoratedBox(
+        decoration: widget.variant == MantineInputVariant.unstyled
+            ? const BoxDecoration()
+            : BoxDecoration(
+                color: bgColor,
+                borderRadius: BorderRadius.circular(resolvedRadius),
+                border: Border.all(
+                    color: borderColor, width: _focused ? 1.5 : 1),
+              ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (widget.leftSection != null) ...[
+                widget.leftSection!,
+                const SizedBox(width: 8),
+              ],
+              Expanded(child: editableText),
+              if (widget.rightSection != null) ...[
+                const SizedBox(width: 8),
+                widget.rightSection!,
+              ],
             ],
-            Expanded(child: editableText),
-            if (widget.rightSection != null) ...[
-              const SizedBox(width: 8),
-              widget.rightSection!,
-            ],
-          ],
+          ),
         ),
       ),
     );
