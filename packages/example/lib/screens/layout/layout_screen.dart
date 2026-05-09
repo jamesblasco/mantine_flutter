@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 
 import '../shared.dart';
 import 'sections/card_section.dart';
+import 'sections/grid_section.dart';
 import 'sections/group_section.dart';
 import 'sections/mantine_box_section.dart';
 import 'sections/paper_section.dart';
@@ -18,6 +19,7 @@ class LayoutScreen extends StatelessWidget {
         GallerySection(title: 'MantineBox', child: MantineBoxSection()),
         GallerySection(title: 'MantineStack', child: StackSection()),
         GallerySection(title: 'MantineGroup', child: GroupSection()),
+        GallerySection(title: 'MantineGrid', child: GridSection()),
         GallerySection(title: 'MantinePaper', child: PaperSection()),
         GallerySection(title: 'Card', child: CardSection()),
       ],
