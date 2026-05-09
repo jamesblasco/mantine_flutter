@@ -53,6 +53,7 @@ export 'src/components/data_display/badge.dart';
 export 'src/components/data_display/card.dart';
 export 'src/components/data_display/divider.dart';
 export 'src/components/data_display/kbd.dart';
+export 'src/components/data_display/collapse.dart';
 
 // Inputs
 export 'src/components/inputs/text_input.dart';
@@ -72,6 +73,9 @@ export 'src/components/feedback/skeleton.dart';
 // Overlay
 export 'src/components/overlay/modal.dart';
 export 'src/components/overlay/popover.dart';
+
+// Navigation
+export 'src/components/navigation/nav_link.dart';
 
 // Button
 export 'src/components/button/button.dart';
