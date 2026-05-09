@@ -14,6 +14,8 @@ class _HooksScreenState extends State<HooksScreen> {
   late final MantineLocalStorage<String> _textStorage;
   late final MantineLocalStorage<int> _counterStorage;
   late final MantineLocalStorage<bool> _boolStorage;
+  final MantineStateHistory<String> _history =
+      MantineStateHistory<String>('Initial value', capacity: 10);
 
   @override
   void initState() {
@@ -41,6 +43,7 @@ class _HooksScreenState extends State<HooksScreen> {
     _textStorage.dispose();
     _counterStorage.dispose();
     _boolStorage.dispose();
+    _history.dispose();
     super.dispose();
   }
 
@@ -49,6 +52,44 @@ class _HooksScreenState extends State<HooksScreen> {
     return GalleryScreen(
       title: 'Hooks & Utils',
       sections: [
+        GallerySection(
+          title: 'MantineStateHistory',
+          child: ListenableBuilder(
+            listenable: _history,
+            builder: (context, _) {
+              return MantineStack(
+                children: [
+                  const MantineText(
+                    'State with undo/redo history tracking.',
+                    dimmed: true,
+                    size: MantineSize.sm,
+                  ),
+                  MantineTextInput(
+                    label: 'History input',
+                    value: _history.value,
+                    onChanged: (v) => _history.set(v),
+                  ),
+                  MantineGroup(
+                    children: [
+                      MantineButton(
+                        onPressed: _history.canUndo ? _history.undo : null,
+                        child: const Text('Undo'),
+                      ),
+                      MantineButton(
+                        onPressed: _history.canRedo ? _history.redo : null,
+                        child: const Text('Redo'),
+                      ),
+                    ],
+                  ),
+                  MantineText('History: ${_history.history.join(', ')}',
+                      size: MantineSize.xs, dimmed: true),
+                  MantineText('Future: ${_history.future.join(', ')}',
+                      size: MantineSize.xs, dimmed: true),
+                ],
+              );
+            },
+          ),
+        ),
         GallerySection(
           title: 'MantineLocalStorage',
           child: MantineStack(
