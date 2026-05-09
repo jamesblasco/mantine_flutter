@@ -59,6 +59,7 @@ export 'src/components/inputs/switch.dart';
 
 // Feedback
 export 'src/components/feedback/loader.dart';
+export 'src/components/feedback/alert.dart';
 
 // Overlay
 export 'src/components/overlay/modal.dart';

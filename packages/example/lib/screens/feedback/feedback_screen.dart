@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import '../shared.dart';
+import 'sections/alert_section.dart';
 import 'sections/button_loading_states_section.dart';
 import 'sections/loader_bars_section.dart';
 import 'sections/loader_colors_section.dart';
@@ -16,6 +17,7 @@ class FeedbackScreen extends StatelessWidget {
     return const GalleryScreen(
       title: 'Feedback',
       sections: [
+        GallerySection(title: 'Alert', child: AlertSection()),
         GallerySection(title: 'Loader — Oval', child: LoaderOvalSection()),
         GallerySection(title: 'Loader — Bars', child: LoaderBarsSection()),
         GallerySection(title: 'Loader — Dots', child: LoaderDotsSection()),
