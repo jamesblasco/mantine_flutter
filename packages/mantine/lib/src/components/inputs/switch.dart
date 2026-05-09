@@ -1,13 +1,15 @@
 import 'package:flutter/widgets.dart';
 import '../../foundation/size.dart';
 import '../../theme/context_extensions.dart';
+import '../../utils/uncontrolled.dart';
 import 'checkbox.dart' show MantineLabelPosition;
 
 class MantineSwitch extends StatefulWidget {
   const MantineSwitch({
     super.key,
-    required this.checked,
-    required this.onChanged,
+    this.checked,
+    this.defaultChecked,
+    this.onChanged,
     this.label,
     this.description,
     this.color,
@@ -19,7 +21,8 @@ class MantineSwitch extends StatefulWidget {
     this.offLabel,
   });
 
-  final bool checked;
+  final bool? checked;
+  final bool? defaultChecked;
   final ValueChanged<bool>? onChanged;
   final String? label;
   final String? description;
@@ -37,16 +40,23 @@ class MantineSwitch extends StatefulWidget {
 
 class _MantineSwitchState extends State<MantineSwitch>
     with SingleTickerProviderStateMixin {
+  late final MantineUncontrolled<bool> _state;
   late AnimationController _controller;
   late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
+    _state = MantineUncontrolled<bool>(
+      value: widget.checked,
+      defaultValue: widget.defaultChecked,
+      finalValue: false,
+      onChanged: widget.onChanged,
+    );
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 200),
-      value: widget.checked ? 1.0 : 0.0,
+      value: _state.currentValue ? 1.0 : 0.0,
     );
     _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
   }
@@ -54,12 +64,15 @@ class _MantineSwitchState extends State<MantineSwitch>
   @override
   void didUpdateWidget(MantineSwitch old) {
     super.didUpdateWidget(old);
-    if (widget.checked != old.checked) {
-      if (widget.checked) {
-        _controller.forward();
-      } else {
-        _controller.reverse();
-      }
+    _state.update(
+      value: widget.checked,
+      onChanged: widget.onChanged,
+    );
+
+    if (_state.currentValue) {
+      _controller.forward();
+    } else {
+      _controller.reverse();
     }
   }
 
@@ -70,8 +83,15 @@ class _MantineSwitchState extends State<MantineSwitch>
   }
 
   void _toggle() {
-    if (!widget.disabled && widget.onChanged != null) {
-      widget.onChanged!(!widget.checked);
+    if (!widget.disabled) {
+      final newValue = !_state.currentValue;
+      _state.handleChange(newValue);
+      if (newValue) {
+        _controller.forward();
+      } else {
+        _controller.reverse();
+      }
+      setState(() {});
     }
   }
 
