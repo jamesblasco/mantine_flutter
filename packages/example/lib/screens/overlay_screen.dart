@@ -2,8 +2,15 @@ import 'package:flutter/widgets.dart';
 import 'package:mantine/mantine.dart';
 import 'shared.dart';
 
-class OverlayScreen extends StatelessWidget {
+class OverlayScreen extends StatefulWidget {
   const OverlayScreen({super.key});
+
+  @override
+  State<OverlayScreen> createState() => _OverlayScreenState();
+}
+
+class _OverlayScreenState extends State<OverlayScreen> {
+  bool _clickOutsideOpened = false;
 
   void _openBasic(BuildContext context) {
     showMantineModal(
@@ -74,9 +81,51 @@ class OverlayScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = context.mantineTheme;
+
     return GalleryScreen(
       title: 'Overlay',
       sections: [
+        GallerySection(
+          title: 'Click outside',
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const MantineText(
+                'Click outside the box to hide it.',
+              ),
+              const SizedBox(height: 8),
+              if (!_clickOutsideOpened)
+                MantineButton(
+                  onPressed: () => setState(() => _clickOutsideOpened = true),
+                  child: const Text('Open dropdown'),
+                )
+              else
+                MantineClickOutside(
+                  onClickOutside: () =>
+                      setState(() => _clickOutsideOpened = false),
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: context.mantineSurface,
+                      borderRadius:
+                          BorderRadius.circular(theme.radius.sm),
+                      border: Border.all(color: context.mantineBorder),
+                      boxShadow: theme.shadows.resolve(MantineSize.sm),
+                    ),
+                    width: 200,
+                    child: const Column(
+                      children: [
+                        MantineText('Click outside to close'),
+                        MantineDivider(my: 8),
+                        MantineText('I am a dropdown!'),
+                      ],
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
         GallerySection(
           title: 'Modal variants',
           child: MantineGroup(
