@@ -40,9 +40,11 @@ class MantineCenter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget content = inline
-        ? FittedBox(fit: BoxFit.scaleDown, child: child)
-        : Center(child: child);
+    final Widget content = Center(
+      widthFactor: inline ? 1.0 : null,
+      heightFactor: inline ? 1.0 : null,
+      child: child,
+    );
 
     return MantineBox(
       width: width,
