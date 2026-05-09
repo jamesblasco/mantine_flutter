@@ -14,6 +14,7 @@ class _HooksScreenState extends State<HooksScreen> {
   late final MantineLocalStorage<String> _textStorage;
   late final MantineLocalStorage<int> _counterStorage;
   late final MantineLocalStorage<bool> _boolStorage;
+  late final MantineToggle<String> _toggle;
 
   @override
   void initState() {
@@ -34,6 +35,7 @@ class _HooksScreenState extends State<HooksScreen> {
       defaultValue: false,
       backend: backend,
     );
+    _toggle = MantineToggle('Blue', 'Red');
   }
 
   @override
@@ -41,6 +43,7 @@ class _HooksScreenState extends State<HooksScreen> {
     _textStorage.dispose();
     _counterStorage.dispose();
     _boolStorage.dispose();
+    _toggle.dispose();
     super.dispose();
   }
 
@@ -107,6 +110,42 @@ class _HooksScreenState extends State<HooksScreen> {
                     onChanged: (v) => _boolStorage.value = v,
                   );
                 },
+              ),
+
+              const MantineDivider(),
+              GallerySection(
+                title: 'MantineToggle',
+                child: ValueListenableBuilder(
+                  valueListenable: _toggle,
+                  builder: (context, value, _) {
+                    final color =
+                        value == 'Blue' ? 'blue' : 'red';
+                    return MantineStack(
+                      children: [
+                        MantineText('Current value: $value'),
+                        MantineGroup(
+                          children: [
+                            MantineButton(
+                              onPressed: _toggle.toggle,
+                              color: color,
+                              child: const Text('Toggle'),
+                            ),
+                            MantineButton(
+                              onPressed: () => _toggle.set('Blue'),
+                              variant: MantineButtonVariant.outline,
+                              child: const Text('Set Blue'),
+                            ),
+                            MantineButton(
+                              onPressed: () => _toggle.set('Red'),
+                              variant: MantineButtonVariant.outline,
+                              child: const Text('Set Red'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    );
+                  },
+                ),
               ),
 
               const MantineDivider(),
