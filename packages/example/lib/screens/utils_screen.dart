@@ -10,6 +10,7 @@ class UtilsScreen extends StatefulWidget {
 }
 
 class _UtilsScreenState extends State<UtilsScreen> {
+  final _setState = MantineSetState<String>(['React', 'Angular']);
   late final MantineInterval _interval;
   int _seconds = 0;
 
@@ -23,6 +24,7 @@ class _UtilsScreenState extends State<UtilsScreen> {
 
   @override
   void dispose() {
+    _setState.dispose();
     _interval.dispose();
     super.dispose();
   }
@@ -32,6 +34,10 @@ class _UtilsScreenState extends State<UtilsScreen> {
     return GalleryScreen(
       title: 'Utilities',
       sections: [
+        GallerySection(
+          title: 'MantineSetState',
+          child: _SetStateDemo(setState: _setState),
+        ),
         GallerySection(
           title: 'MantineInterval',
           child: ListenableBuilder(
@@ -92,6 +98,109 @@ class _UtilsScreenState extends State<UtilsScreen> {
           child: _ValidatedStateDemo(),
         ),
       ],
+    );
+  }
+}
+
+class _SetStateDemo extends StatefulWidget {
+  final MantineSetState<String> setState;
+  const _SetStateDemo({required this.setState});
+
+  @override
+  State<_SetStateDemo> createState() => _SetStateDemoState();
+}
+
+class _SetStateDemoState extends State<_SetStateDemo> {
+  final _inputController = TextEditingController();
+
+  @override
+  void dispose() {
+    _inputController.dispose();
+    super.dispose();
+  }
+
+  void _addItem() {
+    final val = _inputController.text.trim();
+    if (val.isNotEmpty) {
+      widget.setState.add(val);
+      _inputController.clear();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: widget.setState,
+      builder: (context, values, _) {
+        return MantineStack(
+          children: [
+            const MantineText(
+              'Manage a unique set of items with helper methods.',
+              size: MantineSize.sm,
+              dimmed: true,
+            ),
+            MantineGroup(
+              align: CrossAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: MantineTextInput(
+                    label: 'New item',
+                    placeholder: 'Type and click Add',
+                    controller: _inputController,
+                  ),
+                ),
+                MantineButton(
+                  onPressed: _addItem,
+                  child: const Text('Add'),
+                ),
+              ],
+            ),
+            if (values.isNotEmpty) ...[
+              const MantineText('Active items (click to remove):',
+                  size: MantineSize.xs, weight: FontWeight.bold),
+              MantineGroup(
+                children: values.map((item) {
+                  return GestureDetector(
+                    onTap: () => widget.setState.remove(item),
+                    child: MantineBadge(
+                      size: MantineSize.md,
+                      child: Text(item),
+                    ),
+                  );
+                }).toList(),
+              ),
+              MantineButton(
+                variant: MantineButtonVariant.subtle,
+                color: 'red',
+                size: MantineSize.xs,
+                onPressed: () => widget.setState.clear(),
+                child: const Text('Clear all'),
+              ),
+            ] else
+              const MantineText(
+                'Set is empty. Add some items above.',
+                dimmed: true,
+                size: MantineSize.sm,
+              ),
+            const MantineDivider(),
+            const MantineText('Quick toggle:',
+                size: MantineSize.xs, weight: FontWeight.bold),
+            MantineGroup(
+              children: ['Flutter', 'Vue', 'Svelte'].map((item) {
+                final isActive = values.contains(item);
+                return MantineButton(
+                  variant: isActive
+                      ? MantineButtonVariant.filled
+                      : MantineButtonVariant.outline,
+                  size: MantineSize.xs,
+                  onPressed: () => widget.setState.toggle(item),
+                  child: Text(item),
+                );
+              }).toList(),
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -15,6 +15,7 @@ class _HooksScreenState extends State<HooksScreen> {
   late final MantineLocalStorage<int> _counterStorage;
   late final MantineLocalStorage<bool> _boolStorage;
   late final MantineListState<({String id, String label, bool active})> _listState;
+  late final MantineMapState<String, String> _mapState;
 
   @override
   void initState() {
@@ -40,6 +41,10 @@ class _HooksScreenState extends State<HooksScreen> {
       (id: '2', label: 'Second item', active: false),
       (id: '3', label: 'Third item', active: false),
     ]);
+    _mapState = MantineMapState<String, String>({
+      'Apple': 'Red',
+      'Banana': 'Yellow',
+    });
   }
 
   @override
@@ -48,6 +53,7 @@ class _HooksScreenState extends State<HooksScreen> {
     _counterStorage.dispose();
     _boolStorage.dispose();
     _listState.dispose();
+    _mapState.dispose();
     super.dispose();
   }
 
@@ -56,6 +62,64 @@ class _HooksScreenState extends State<HooksScreen> {
     return GalleryScreen(
       title: 'Hooks & Utils',
       sections: [
+        GallerySection(
+          title: 'MantineMapState',
+          child: ValueListenableBuilder(
+            valueListenable: _mapState,
+            builder: (context, map, _) {
+              return MantineStack(
+                children: [
+                  const MantineText(
+                    'Observable map with helper methods for common operations.',
+                    dimmed: true,
+                    size: MantineSize.sm,
+                  ),
+                  if (map.isEmpty)
+                    const MantineText('Map is empty', dimmed: true)
+                  else
+                    ...map.entries.map((e) => MantineGroup(
+                          justify: MainAxisAlignment.spaceBetween,
+                          children: [
+                            MantineText('${e.key}: ${e.value}'),
+                            MantineButton(
+                              size: MantineSize.xs,
+                              variant: MantineButtonVariant.subtle,
+                              color: 'red',
+                              onPressed: () => _mapState.remove(e.key),
+                              child: const Text('Remove'),
+                            ),
+                          ],
+                        )),
+                  MantineGroup(
+                    children: [
+                      MantineButton(
+                        onPressed: () => _mapState.set(
+                          'Orange',
+                          'Orange',
+                        ),
+                        child: const Text('Add Orange'),
+                      ),
+                      MantineButton(
+                        onPressed: () => _mapState.merge({
+                          'Grape': 'Purple',
+                          'Kiwi': 'Green',
+                        }),
+                        variant: MantineButtonVariant.outline,
+                        child: const Text('Merge multiple'),
+                      ),
+                      MantineButton(
+                        onPressed: _mapState.clear,
+                        variant: MantineButtonVariant.subtle,
+                        color: 'gray',
+                        child: const Text('Clear all'),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
         GallerySection(
           title: 'MantineLocalStorage',
           child: MantineStack(
