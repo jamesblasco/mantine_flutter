@@ -73,6 +73,9 @@ export 'src/components/feedback/skeleton.dart';
 export 'src/components/overlay/modal.dart';
 export 'src/components/overlay/popover.dart';
 
+// Navigation
+export 'src/components/navigation/stepper.dart';
+
 // Button
 export 'src/components/button/button.dart';
 export 'src/components/button/action_icon.dart';
