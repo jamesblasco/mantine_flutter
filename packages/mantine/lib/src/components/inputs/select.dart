@@ -66,6 +66,7 @@ class _MantineSelectState extends State<MantineSelect> {
   late final MantineUncontrolled<String?> _state;
   late final TextEditingController _controller;
   final FocusNode _focusNode = FocusNode();
+  final FocusNode _keyboardFocusNode = FocusNode(canRequestFocus: false);
   bool _opened = false;
   String _searchQuery = '';
   int _highlightedIndex = -1;
@@ -143,6 +144,7 @@ class _MantineSelectState extends State<MantineSelect> {
   void dispose() {
     _focusNode.removeListener(_onFocusChange);
     _focusNode.dispose();
+    _keyboardFocusNode.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -150,18 +152,19 @@ class _MantineSelectState extends State<MantineSelect> {
   @override
   Widget build(BuildContext context) {
     final trigger = KeyboardListener(
-      focusNode: FocusNode(canRequestFocus: false), // Sub-focus node for keyboard listener without stealing focus
+      focusNode: _keyboardFocusNode,
       onKeyEvent: (event) {
         if (event is KeyDownEvent) {
+          final maxIndex = _filteredData.length + (widget.creatable && _searchQuery.isNotEmpty ? 0 : -1);
           if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
             setState(() {
               _opened = true;
-              _highlightedIndex = (_highlightedIndex + 1).clamp(-1, _filteredData.length + (widget.creatable ? 0 : -1));
+              _highlightedIndex = (_highlightedIndex + 1).clamp(-1, maxIndex);
             });
           } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
             setState(() {
               _opened = true;
-              _highlightedIndex = (_highlightedIndex - 1).clamp(-1, _filteredData.length + (widget.creatable ? 0 : -1));
+              _highlightedIndex = (_highlightedIndex - 1).clamp(-1, maxIndex);
             });
           } else if (event.logicalKey == LogicalKeyboardKey.enter) {
              if (_opened) {
@@ -233,21 +236,23 @@ class _MantineSelectState extends State<MantineSelect> {
       ),
     ),);
 
-    return MantinePopover(
-      opened: _opened && !widget.disabled,
-      onClose: () {
-        setState(() => _opened = false);
-      },
-      position: MantinePopoverPosition.bottom,
-      offset: 4,
-      radius: widget.radius,
-      size: widget.size,
-      dropdownPadding: EdgeInsets.zero,
-      target: trigger,
-      content: Container(
-        constraints: const BoxConstraints(maxHeight: 250),
-        width: 200, // Should probably match trigger width, but popover logic might need adjustment
-        child: _SelectDropdown(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return MantinePopover(
+          opened: _opened && !widget.disabled,
+          onClose: () {
+            setState(() => _opened = false);
+          },
+          position: MantinePopoverPosition.bottom,
+          offset: 4,
+          radius: widget.radius,
+          size: widget.size,
+          dropdownPadding: EdgeInsets.zero,
+          target: trigger,
+          content: Container(
+            constraints: const BoxConstraints(maxHeight: 250),
+            width: constraints.maxWidth,
+            child: _SelectDropdown(
           data: _filteredData,
           selectedValue: _state.currentValue,
           highlightedIndex: _highlightedIndex,
@@ -255,8 +260,10 @@ class _MantineSelectState extends State<MantineSelect> {
           size: widget.size,
           searchQuery: _searchQuery,
           creatable: widget.creatable,
-        ),
-      ),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -371,13 +378,21 @@ class _SelectGroupHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fontSize = switch (size) {
+      MantineSize.xs => 10.0,
+      MantineSize.sm => 11.0,
+      MantineSize.md => 12.0,
+      MantineSize.lg => 13.0,
+      MantineSize.xl => 14.0,
+    };
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       child: Text(
         label,
         style: TextStyle(
           color: context.mantineDimmedText,
-          fontSize: 12,
+          fontSize: fontSize,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -414,6 +429,14 @@ class _SelectItem extends StatelessWidget {
           : theme.colors.resolve('gray')[0];
     }
 
+    final fontSize = switch (size) {
+      MantineSize.xs => 12.0,
+      MantineSize.sm => 14.0,
+      MantineSize.md => 16.0,
+      MantineSize.lg => 18.0,
+      MantineSize.xl => 20.0,
+    };
+
     return GestureDetector(
       onTap: item.disabled ? null : onSelect,
       behavior: HitTestBehavior.opaque,
@@ -429,7 +452,7 @@ class _SelectItem extends StatelessWidget {
                   color: item.disabled
                       ? context.mantineDimmedText
                       : context.mantineBodyText,
-                  fontSize: 14,
+                  fontSize: fontSize,
                 ),
               ),
             ),

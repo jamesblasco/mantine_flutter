@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import '../../foundation/size.dart';
 import '../../theme/context_extensions.dart';
@@ -186,6 +187,10 @@ class _MantineTextareaState extends State<MantineTextarea> {
               keyboardType: TextInputType.multiline,
               maxLines: null,
               autofocus: widget.autofocus,
+              inputFormatters: [
+                if (widget.maxLength != null)
+                  LengthLimitingTextInputFormatter(widget.maxLength),
+              ],
               onChanged: (v) {
                 _state.handleChange(v);
               },
