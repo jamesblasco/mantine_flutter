@@ -38,6 +38,7 @@ export 'src/theme/context_extensions.dart';
 
 // Layout
 export 'src/components/layout/box.dart';
+export 'src/components/layout/center.dart';
 export 'src/components/layout/stack.dart';
 export 'src/components/layout/group.dart';
 export 'src/components/layout/container.dart';
