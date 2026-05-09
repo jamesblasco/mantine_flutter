@@ -17,10 +17,12 @@ class _InputsScreenState extends State<InputsScreen> {
   bool _switch2 = true;
   String _inputValue = '';
   final _counter = MantineCounter(0, min: 0, max: 10);
+  final _debounced = MantineDebounced<String>('', delay: const Duration(milliseconds: 500));
 
   @override
   void dispose() {
     _counter.dispose();
+    _debounced.dispose();
     super.dispose();
   }
 
@@ -197,6 +199,38 @@ class _InputsScreenState extends State<InputsScreen> {
                 ],
               );
             },
+          ),
+        ),
+        GallerySection(
+          title: 'Debounced (MantineDebounced)',
+          child: MantineStack(
+            align: CrossAxisAlignment.start,
+            children: [
+              MantineBox(
+                maxWidth: 400,
+                child: MantineTextInput(
+                  label: 'Debounced input',
+                  placeholder: 'Type something...',
+                  onChanged: _debounced.set,
+                ),
+              ),
+              ValueListenableBuilder(
+                valueListenable: _debounced,
+                builder: (context, value, _) {
+                  return MantineStack(
+                    align: CrossAxisAlignment.start,
+                    children: [
+                      MantineText('Debounced value: $value', weight: FontWeight.bold),
+                      const MantineText('Different sizes:'),
+                      ...MantineSize.values.map((s) => MantineText(
+                            value.isEmpty ? 'Size ${s.name}' : value,
+                            size: s,
+                          )),
+                    ],
+                  );
+                },
+              ),
+            ],
           ),
         ),
       ],
