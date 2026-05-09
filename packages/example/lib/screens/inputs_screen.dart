@@ -16,6 +16,13 @@ class _InputsScreenState extends State<InputsScreen> {
   bool _switch1 = false;
   bool _switch2 = true;
   String _inputValue = '';
+  final _counter = MantineCounter(0, min: 0, max: 10);
+
+  @override
+  void dispose() {
+    _counter.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,6 +145,58 @@ class _InputsScreenState extends State<InputsScreen> {
                     size: s,
                   )),
             ],
+          ),
+        ),
+        GallerySection(
+          title: 'Counter (MantineCounter)',
+          child: ValueListenableBuilder(
+            valueListenable: _counter,
+            builder: (context, value, _) {
+              return MantineStack(
+                align: CrossAxisAlignment.start,
+                children: [
+                  MantineText('Count: $value (min: 0, max: 10)'),
+                  MantineGroup(
+                    children: [
+                      MantineButton(
+                        onPressed: _counter.decrement,
+                        child: const Text('-'),
+                      ),
+                      MantineButton(
+                        onPressed: _counter.increment,
+                        child: const Text('+'),
+                      ),
+                      MantineButton(
+                        onPressed: _counter.reset,
+                        variant: MantineButtonVariant.outline,
+                        child: const Text('Reset'),
+                      ),
+                      MantineButton(
+                        onPressed: () => _counter.set(5),
+                        variant: MantineButtonVariant.outline,
+                        child: const Text('Set to 5'),
+                      ),
+                    ],
+                  ),
+                  const MantineText('Different sizes:'),
+                  ...MantineSize.values.map((s) => MantineGroup(
+                        children: [
+                          MantineButton(
+                            onPressed: _counter.decrement,
+                            size: s,
+                            child: const Text('-'),
+                          ),
+                          MantineText('$value', size: s),
+                          MantineButton(
+                            onPressed: _counter.increment,
+                            size: s,
+                            child: const Text('+'),
+                          ),
+                        ],
+                      )),
+                ],
+              );
+            },
           ),
         ),
       ],

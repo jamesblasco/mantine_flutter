@@ -10,6 +10,9 @@ export 'src/foundation/breakpoints.dart';
 export 'src/foundation/shadows.dart';
 export 'src/foundation/color_utils.dart';
 
+// Utils
+export 'src/utils/counter.dart';
+
 // Theme
 export 'src/theme/mantine_theme_data.dart';
 export 'src/theme/mantine_provider.dart';
