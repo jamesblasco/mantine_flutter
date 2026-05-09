@@ -12,6 +12,7 @@ export 'src/foundation/color_utils.dart';
 
 // Utils
 export 'src/utils/counter.dart';
+export 'src/utils/throttled.dart';
 
 // Theme
 export 'src/theme/mantine_theme_data.dart';

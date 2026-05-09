@@ -17,10 +17,13 @@ class _InputsScreenState extends State<InputsScreen> {
   bool _switch2 = true;
   String _inputValue = '';
   final _counter = MantineCounter(0, min: 0, max: 10);
+  final _throttledCounter =
+      MantineThrottled<int>(0, duration: const Duration(seconds: 1));
 
   @override
   void dispose() {
     _counter.dispose();
+    _throttledCounter.dispose();
     super.dispose();
   }
 
@@ -189,6 +192,53 @@ class _InputsScreenState extends State<InputsScreen> {
                           MantineText('$value', size: s),
                           MantineButton(
                             onPressed: _counter.increment,
+                            size: s,
+                            child: const Text('+'),
+                          ),
+                        ],
+                      )),
+                ],
+              );
+            },
+          ),
+        ),
+        GallerySection(
+          title: 'Throttled Counter (MantineThrottled)',
+          child: ValueListenableBuilder(
+            valueListenable: _throttledCounter,
+            builder: (context, value, _) {
+              return MantineStack(
+                align: CrossAxisAlignment.start,
+                children: [
+                  MantineText(
+                      'Count (throttled 1s): $value (Updates only once per second)'),
+                  MantineGroup(
+                    children: [
+                      MantineButton(
+                        onPressed: () =>
+                            _throttledCounter.value = _throttledCounter.value - 1,
+                        child: const Text('-'),
+                      ),
+                      MantineButton(
+                        onPressed: () =>
+                            _throttledCounter.value = _throttledCounter.value + 1,
+                        child: const Text('+'),
+                      ),
+                    ],
+                  ),
+                  const MantineText('Different sizes:'),
+                  ...MantineSize.values.map((s) => MantineGroup(
+                        children: [
+                          MantineButton(
+                            onPressed: () => _throttledCounter.value =
+                                _throttledCounter.value - 1,
+                            size: s,
+                            child: const Text('-'),
+                          ),
+                          MantineText('$value', size: s),
+                          MantineButton(
+                            onPressed: () => _throttledCounter.value =
+                                _throttledCounter.value + 1,
                             size: s,
                             child: const Text('+'),
                           ),
