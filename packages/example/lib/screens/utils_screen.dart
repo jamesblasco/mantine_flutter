@@ -11,6 +11,10 @@ class UtilsScreen extends StatelessWidget {
       title: 'Utilities',
       sections: [
         GallerySection(
+          title: 'MantinePaginationState',
+          child: const _PaginationDemo(),
+        ),
+        GallerySection(
           title: 'MantineIdle',
           child: MantineIdle.wrap(
             timeout: const Duration(seconds: 3),
@@ -18,6 +22,160 @@ class UtilsScreen extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _PaginationDemo extends StatefulWidget {
+  const _PaginationDemo();
+
+  @override
+  State<_PaginationDemo> createState() => _PaginationDemoState();
+}
+
+class _PaginationDemoState extends State<_PaginationDemo> {
+  late final MantinePaginationState _pagination;
+
+  @override
+  void initState() {
+    super.initState();
+    _pagination = MantinePaginationState(
+      total: 100,
+      pageSize: 10,
+      siblings: 1,
+      boundaries: 1,
+    );
+  }
+
+  @override
+  void dispose() {
+    _pagination.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: _pagination,
+      builder: (context, _) {
+        return MantineStack(
+          children: [
+            MantineText('Total items: ${_pagination.total}'),
+            MantineText('Page size: ${_pagination.pageSize}'),
+            MantineText('Total pages: ${_pagination.totalPages}'),
+            MantineText('Active page: ${_pagination.page}'),
+            const MantineDivider(),
+            MantineGroup(
+              children: [
+                MantineButton(
+                  onPressed: _pagination.page > 1 ? _pagination.first : null,
+                  size: MantineSize.xs,
+                  variant: MantineButtonVariant.outline,
+                  child: const MantineText('First'),
+                ),
+                MantineButton(
+                  onPressed: _pagination.page > 1 ? _pagination.previous : null,
+                  size: MantineSize.xs,
+                  variant: MantineButtonVariant.outline,
+                  child: const MantineText('Prev'),
+                ),
+                ..._pagination.range.map((item) {
+                  if (item == 'dots') {
+                    return const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 4),
+                      child: MantineText('...'),
+                    );
+                  }
+                  final page = item as int;
+                  return MantineButton(
+                    onPressed: () => _pagination.setPage(page),
+                    size: MantineSize.xs,
+                    variant: page == _pagination.page
+                        ? MantineButtonVariant.filled
+                        : MantineButtonVariant.outline,
+                    child: MantineText(page.toString()),
+                  );
+                }),
+                MantineButton(
+                  onPressed: _pagination.page < _pagination.totalPages
+                      ? _pagination.next
+                      : null,
+                  size: MantineSize.xs,
+                  variant: MantineButtonVariant.outline,
+                  child: const MantineText('Next'),
+                ),
+                MantineButton(
+                  onPressed: _pagination.page < _pagination.totalPages
+                      ? _pagination.last
+                      : null,
+                  size: MantineSize.xs,
+                  variant: MantineButtonVariant.outline,
+                  child: const MantineText('Last'),
+                ),
+              ],
+            ),
+            const MantineDivider(),
+            MantineGroup(
+              children: [
+                const MantineText('Siblings:'),
+                MantineButton(
+                  onPressed: () => _pagination.siblings = 0,
+                  size: MantineSize.xs,
+                  variant: _pagination.siblings == 0
+                      ? MantineButtonVariant.filled
+                      : MantineButtonVariant.outline,
+                  child: const MantineText('0'),
+                ),
+                MantineButton(
+                  onPressed: () => _pagination.siblings = 1,
+                  size: MantineSize.xs,
+                  variant: _pagination.siblings == 1
+                      ? MantineButtonVariant.filled
+                      : MantineButtonVariant.outline,
+                  child: const MantineText('1'),
+                ),
+                MantineButton(
+                  onPressed: () => _pagination.siblings = 2,
+                  size: MantineSize.xs,
+                  variant: _pagination.siblings == 2
+                      ? MantineButtonVariant.filled
+                      : MantineButtonVariant.outline,
+                  child: const MantineText('2'),
+                ),
+              ],
+            ),
+            MantineGroup(
+              children: [
+                const MantineText('Boundaries:'),
+                MantineButton(
+                  onPressed: () => _pagination.boundaries = 0,
+                  size: MantineSize.xs,
+                  variant: _pagination.boundaries == 0
+                      ? MantineButtonVariant.filled
+                      : MantineButtonVariant.outline,
+                  child: const MantineText('0'),
+                ),
+                MantineButton(
+                  onPressed: () => _pagination.boundaries = 1,
+                  size: MantineSize.xs,
+                  variant: _pagination.boundaries == 1
+                      ? MantineButtonVariant.filled
+                      : MantineButtonVariant.outline,
+                  child: const MantineText('1'),
+                ),
+                MantineButton(
+                  onPressed: () => _pagination.boundaries = 2,
+                  size: MantineSize.xs,
+                  variant: _pagination.boundaries == 2
+                      ? MantineButtonVariant.filled
+                      : MantineButtonVariant.outline,
+                  child: const MantineText('2'),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 }
