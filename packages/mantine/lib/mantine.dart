@@ -47,6 +47,7 @@ export 'src/components/text/text.dart';
 export 'src/components/text/title.dart';
 
 // Data Display
+export 'src/components/data_display/avatar.dart';
 export 'src/components/data_display/badge.dart';
 export 'src/components/data_display/card.dart';
 export 'src/components/data_display/divider.dart';
