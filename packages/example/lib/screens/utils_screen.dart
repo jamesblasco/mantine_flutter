@@ -17,6 +17,89 @@ class UtilsScreen extends StatelessWidget {
             child: const _IdleDemo(),
           ),
         ),
+        const GallerySection(
+          title: 'MantineDisclosure',
+          child: _DisclosureDemo(),
+        ),
+      ],
+    );
+  }
+}
+
+class _DisclosureDemo extends StatefulWidget {
+  const _DisclosureDemo();
+
+  @override
+  State<_DisclosureDemo> createState() => _DisclosureDemoState();
+}
+
+class _DisclosureDemoState extends State<_DisclosureDemo> {
+  final _disclosure = MantineDisclosure(false);
+
+  @override
+  void dispose() {
+    _disclosure.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MantineStack(
+      children: [
+        MantineGroup(
+          children: [
+            MantineButton(
+              onPressed: _disclosure.open,
+              child: const Text('Open'),
+            ),
+            MantineButton(
+              onPressed: _disclosure.close,
+              variant: MantineButtonVariant.outline,
+              child: const Text('Close'),
+            ),
+            MantineButton(
+              onPressed: _disclosure.toggle,
+              variant: MantineButtonVariant.light,
+              child: const Text('Toggle'),
+            ),
+          ],
+        ),
+        ValueListenableBuilder(
+          valueListenable: _disclosure,
+          builder: (context, opened, _) {
+            if (!opened) {
+              return const MantineText(
+                'Disclosure is closed. Click "Open" or "Toggle" to reveal content.',
+                dimmed: true,
+                size: MantineSize.sm,
+              );
+            }
+
+            return MantineCard(
+              withBorder: true,
+              shadow: MantineSize.sm,
+              padding: MantineSize.md,
+              child: MantineStack(
+                children: [
+                  const MantineText(
+                    'Disclosure Content',
+                    weight: FontWeight.bold,
+                  ),
+                  const MantineText(
+                    'This content is only visible when the disclosure is open.',
+                    size: MantineSize.sm,
+                  ),
+                  MantineButton(
+                    onPressed: _disclosure.close,
+                    color: 'red',
+                    size: MantineSize.xs,
+                    child: const Text('Close from inside'),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ],
     );
   }
