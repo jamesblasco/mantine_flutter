@@ -43,3 +43,4 @@ export 'src/components/overlay/modal.dart';
 
 // Button
 export 'src/components/button/button.dart';
+export 'src/components/button/action_icon.dart';
