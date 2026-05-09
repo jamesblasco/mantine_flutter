@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import '../../foundation/size.dart';
 import '../../theme/context_extensions.dart';
@@ -188,6 +189,10 @@ class _MantineTextInputState extends State<MantineTextInput> {
               keyboardType: widget.inputType,
               obscureText: widget.obscureText,
               maxLines: widget.obscureText ? 1 : widget.maxLines,
+              inputFormatters: [
+                if (widget.maxLength != null)
+                  LengthLimitingTextInputFormatter(widget.maxLength),
+              ],
               autofocus: widget.autofocus,
               onChanged: (v) {
                 _state.handleChange(v);
