@@ -11,10 +11,21 @@ class UtilsScreen extends StatefulWidget {
 
 class _UtilsScreenState extends State<UtilsScreen> {
   final _setState = MantineSetState<String>(['React', 'Angular']);
+  late final MantineInterval _interval;
+  int _seconds = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _interval = MantineInterval(const Duration(seconds: 1), () {
+      setState(() => _seconds++);
+    });
+  }
 
   @override
   void dispose() {
     _setState.dispose();
+    _interval.dispose();
     super.dispose();
   }
 
@@ -28,11 +39,63 @@ class _UtilsScreenState extends State<UtilsScreen> {
           child: _SetStateDemo(setState: _setState),
         ),
         GallerySection(
+          title: 'MantineInterval',
+          child: ListenableBuilder(
+            listenable: _interval,
+            builder: (context, _) {
+              return MantineStack(
+                children: [
+                  MantineText('Seconds passed: $_seconds'),
+                  MantineText(
+                    'Interval is currently ${_interval.active ? 'active' : 'inactive'}',
+                    dimmed: true,
+                    size: MantineSize.sm,
+                  ),
+                  MantineGroup(
+                    children: [
+                      MantineButton(
+                        onPressed: _interval.active ? null : _interval.start,
+                        color: 'teal',
+                        child: const Text('Start'),
+                      ),
+                      MantineButton(
+                        onPressed: !_interval.active ? null : _interval.stop,
+                        color: 'red',
+                        child: const Text('Stop'),
+                      ),
+                      MantineButton(
+                        onPressed: _interval.toggle,
+                        variant: MantineButtonVariant.outline,
+                        child: const Text('Toggle'),
+                      ),
+                    ],
+                  ),
+                  const MantineText('Sizing variants:'),
+                  MantineGroup(
+                    align: CrossAxisAlignment.center,
+                    children: MantineSize.values.map((s) {
+                      return MantineButton(
+                        onPressed: _interval.toggle,
+                        size: s,
+                        child: Text(s.name.toUpperCase()),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+        GallerySection(
           title: 'MantineIdle',
           child: MantineIdle.wrap(
             timeout: const Duration(seconds: 3),
             child: const _IdleDemo(),
           ),
+        ),
+        const GallerySection(
+          title: 'MantineValidatedState',
+          child: _ValidatedStateDemo(),
         ),
       ],
     );
@@ -135,6 +198,56 @@ class _SetStateDemoState extends State<_SetStateDemo> {
                 );
               }).toList(),
             ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _ValidatedStateDemo extends StatefulWidget {
+  const _ValidatedStateDemo();
+
+  @override
+  State<_ValidatedStateDemo> createState() => _ValidatedStateDemoState();
+}
+
+class _ValidatedStateDemoState extends State<_ValidatedStateDemo> {
+  final emailState = MantineValidatedState<String>(
+    '',
+    (value) => value.isEmpty
+        ? 'Email is required'
+        : !value.contains('@')
+            ? 'Invalid email'
+            : null,
+  );
+
+  @override
+  void dispose() {
+    emailState.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: emailState,
+      builder: (context, _) {
+        return MantineStack(
+          children: [
+            const MantineText(
+              'Enter a valid email address to clear the error state.',
+              size: MantineSize.sm,
+              dimmed: true,
+            ),
+            ...MantineSize.values.map((size) => MantineTextInput(
+                  label: 'Email (${size.name})',
+                  placeholder: 'hello@mantine.dev',
+                  value: emailState.value,
+                  error: emailState.error,
+                  size: size,
+                  onChanged: emailState.set,
+                )),
           ],
         );
       },
