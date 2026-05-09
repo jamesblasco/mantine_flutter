@@ -1,0 +1,21 @@
+name: mantine_flutter
+
+packages:
+  - packages/**
+
+command:
+  bootstrap:
+    usePubspecOverrides: true
+
+scripts:
+  analyze:
+    run: melos exec -- flutter analyze
+    description: Run flutter analyze on all packages.
+
+  test:
+    run: melos exec --dir-exists=test -- flutter test
+    description: Run tests on all packages that have a test directory.
+
+  format:
+    run: melos exec -- dart format .
+    description: Run dart format on all packages.

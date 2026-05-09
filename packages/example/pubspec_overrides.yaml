@@ -1,0 +1,4 @@
+# melos_managed_dependency_overrides: mantine
+dependency_overrides:
+  mantine:
+    path: ../mantine
