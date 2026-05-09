@@ -16,6 +16,7 @@ class MantineActionIcon extends StatefulWidget {
     this.loading = false,
     this.gradient,
     this.disabled = false,
+    this.iconSize,
   });
 
   final VoidCallback? onPressed;
@@ -27,6 +28,7 @@ class MantineActionIcon extends StatefulWidget {
   final bool loading;
   final (Color, Color)? gradient;
   final bool disabled;
+  final double? iconSize;
 
   @override
   State<MantineActionIcon> createState() => _MantineActionIconState();
@@ -54,13 +56,14 @@ class _MantineActionIconState extends State<MantineActionIcon> {
       MantineSize.xl => 60.0,
     };
 
-    final iconSize = switch (widget.size) {
-      MantineSize.xs => 14.0,
-      MantineSize.sm => 18.0,
-      MantineSize.md => 22.0,
-      MantineSize.lg => 26.0,
-      MantineSize.xl => 32.0,
-    };
+    final iconSize = widget.iconSize ??
+        switch (widget.size) {
+          MantineSize.xs => 14.0,
+          MantineSize.sm => 18.0,
+          MantineSize.md => 22.0,
+          MantineSize.lg => 26.0,
+          MantineSize.xl => 32.0,
+        };
 
     final resolvedRadius = theme.radius.resolve(widget.radius ?? theme.defaultRadius);
 
