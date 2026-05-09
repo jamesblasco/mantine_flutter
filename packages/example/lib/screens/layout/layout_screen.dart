@@ -1,0 +1,24 @@
+import 'package:flutter/widgets.dart';
+
+import '../shared.dart';
+import 'sections/card_section.dart';
+import 'sections/group_section.dart';
+import 'sections/mantine_box_section.dart';
+import 'sections/stack_section.dart';
+
+class LayoutScreen extends StatelessWidget {
+  const LayoutScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const GalleryScreen(
+      title: 'Layout',
+      sections: [
+        GallerySection(title: 'MantineBox', child: MantineBoxSection()),
+        GallerySection(title: 'MantineStack', child: StackSection()),
+        GallerySection(title: 'MantineGroup', child: GroupSection()),
+        GallerySection(title: 'Card', child: CardSection()),
+      ],
+    );
+  }
+}

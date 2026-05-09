@@ -1,17 +1,17 @@
 import 'package:flutter/widgets.dart';
 import 'package:mantine/mantine.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'buttons_screen.dart';
-import 'typography_screen.dart';
-import 'layout_screen.dart';
-import 'inputs_screen.dart';
-import 'feedback_screen.dart';
-import 'overlay_screen.dart';
-import 'utils_screen.dart';
-import 'hooks_screen.dart';
-import 'hotkeys_screen.dart';
+import 'buttons/buttons_screen.dart';
+import 'typography/typography_screen.dart';
+import 'layout/layout_screen.dart';
+import 'inputs/inputs_screen.dart';
+import 'feedback/feedback_screen.dart';
+import 'overlay/overlay_screen.dart';
+import 'utils/utils_screen.dart';
+import 'hooks/hooks_screen.dart';
+import 'hotkeys/hotkeys_screen.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({
     super.key,
     required this.onToggleTheme,
@@ -26,10 +26,28 @@ class HomeScreen extends StatefulWidget {
   final bool isDark;
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  Widget build(BuildContext context) {
+    return _HomeContent(
+      onToggleTheme: onToggleTheme,
+      onPrimaryColorChange: onPrimaryColorChange,
+    );
+  }
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeContent extends StatefulWidget {
+  const _HomeContent({
+    required this.onToggleTheme,
+    required this.onPrimaryColorChange,
+  });
+
+  final VoidCallback onToggleTheme;
+  final ValueChanged<String> onPrimaryColorChange;
+
+  @override
+  State<_HomeContent> createState() => _HomeContentState();
+}
+
+class _HomeContentState extends State<_HomeContent> {
   int _selectedIndex = 0;
 
   static final _navItems = [
