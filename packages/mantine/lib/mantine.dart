@@ -54,6 +54,7 @@ export 'src/components/data_display/kbd.dart';
 
 // Inputs
 export 'src/components/inputs/text_input.dart';
+export 'src/components/inputs/number_input.dart';
 export 'src/components/inputs/checkbox.dart';
 export 'src/components/inputs/switch.dart';
 
