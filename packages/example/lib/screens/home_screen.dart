@@ -7,6 +7,7 @@ import 'layout/layout_screen.dart';
 import 'inputs/inputs_screen.dart';
 import 'feedback/feedback_screen.dart';
 import 'overlay/overlay_screen.dart';
+import 'navigation/nav_link_screen.dart';
 import 'utils/utils_screen.dart';
 import 'hooks/hooks_screen.dart';
 import 'hotkeys/hotkeys_screen.dart';
@@ -57,6 +58,7 @@ class _HomeContentState extends State<_HomeContent> {
     (label: 'Inputs', icon: PhosphorIcons.pencilSimple()),
     (label: 'Feedback', icon: PhosphorIcons.circleNotch()),
     (label: 'Overlays', icon: PhosphorIcons.appWindow()),
+    (label: 'Navigation', icon: PhosphorIcons.list()),
     (label: 'Utils', icon: PhosphorIcons.wrench()),
     (label: 'Hooks', icon: PhosphorIcons.floppyDisk()),
     (label: 'Hotkeys', icon: PhosphorIcons.keyboard()),
@@ -82,6 +84,7 @@ class _HomeContentState extends State<_HomeContent> {
       const InputsScreen(),
       const FeedbackScreen(),
       const OverlayScreen(),
+      const NavLinkScreen(),
       const UtilsScreen(),
       const HooksScreen(),
       const HotkeysScreen(),
