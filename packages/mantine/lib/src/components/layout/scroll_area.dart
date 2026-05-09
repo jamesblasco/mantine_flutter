@@ -164,7 +164,7 @@ class _MantineScrollAreaState extends State<MantineScrollArea>
   }
 
   bool _handleScrollNotification(ScrollNotification notification) {
-    if (notification.depth != 0) return false;
+    if (notification.depth > 1) return false;
 
     if (notification is ScrollUpdateNotification ||
         notification is ScrollMetricsNotification) {
