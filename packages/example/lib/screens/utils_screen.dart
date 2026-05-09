@@ -96,6 +96,10 @@ class _UtilsScreenState extends State<UtilsScreen> {
         const GallerySection(
           title: 'MantineValidatedState',
           child: _ValidatedStateDemo(),
+        )
+        const GallerySection(
+          title: 'MantineValidatedState',
+          child: _ValidatedStateDemo(),
         ),
       ],
     );
