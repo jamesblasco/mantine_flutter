@@ -57,6 +57,7 @@ export 'src/components/inputs/text_input.dart';
 export 'src/components/inputs/textarea.dart';
 export 'src/components/inputs/checkbox.dart';
 export 'src/components/inputs/switch.dart';
+export 'src/components/inputs/segmented_control.dart';
 
 // Feedback
 export 'src/components/feedback/loader.dart';
