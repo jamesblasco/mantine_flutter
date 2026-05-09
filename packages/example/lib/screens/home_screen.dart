@@ -7,6 +7,7 @@ import 'layout_screen.dart';
 import 'inputs_screen.dart';
 import 'feedback_screen.dart';
 import 'overlay_screen.dart';
+import 'hooks_screen.dart';
 import 'hotkeys_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -37,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
     (label: 'Inputs', icon: PhosphorIcons.pencilSimple()),
     (label: 'Feedback', icon: PhosphorIcons.circleNotch()),
     (label: 'Overlays', icon: PhosphorIcons.appWindow()),
+    (label: 'Hooks', icon: PhosphorIcons.floppyDisk()),
     (label: 'Hotkeys', icon: PhosphorIcons.keyboard()),
   ];
 
@@ -60,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
       const InputsScreen(),
       const FeedbackScreen(),
       const OverlayScreen(),
+      const HooksScreen(),
       const HotkeysScreen(),
     ];
 

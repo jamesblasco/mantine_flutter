@@ -13,6 +13,7 @@ export 'src/foundation/color_utils.dart';
 // Utils
 export 'src/utils/counter.dart';
 export 'src/utils/click_outside.dart';
+export 'src/utils/local_storage.dart';
 export 'src/utils/hotkeys.dart';
 export 'src/utils/timeout.dart';
 export 'src/utils/debounced.dart';
