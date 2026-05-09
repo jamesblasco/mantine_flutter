@@ -18,11 +18,13 @@ class _CenterSectionState extends State<CenterSection> {
     return MantineStack(
       children: [
         const MantineText('Default (inline: false) - takes full width'),
-        MantineCenter(
+        MantineBox(
           height: 100,
           color: theme.primaryColorScale[0],
           radiusSize: MantineSize.sm,
-          child: const MantineText('Centered content'),
+          child: const MantineCenter(
+            child: MantineText('Centered content'),
+          ),
         ),
         const SizedBox(height: 20),
         MantineGroup(
@@ -37,22 +39,15 @@ class _CenterSectionState extends State<CenterSection> {
         MantineBox(
           border: Border.all(color: theme.colors.resolve('gray')[3]),
           paddingSize: MantineSize.md,
-          child: MantineCenter(
-            inline: _inline,
+          child: MantineBox(
             color: theme.primaryColorScale[0],
             paddingSize: MantineSize.md,
             radiusSize: MantineSize.sm,
-            child: const MantineText('Centered content'),
+            child: MantineCenter(
+              inline: _inline,
+              child: const MantineText('Centered content'),
+            ),
           ),
-        ),
-        const MantineText('Center with custom dimensions'),
-        MantineCenter(
-          width: 200,
-          height: 100,
-          color: theme.colors.resolve('teal')[0],
-          radiusSize: MantineSize.md,
-          shadowSize: MantineSize.sm,
-          child: const MantineText('200x100'),
         ),
       ],
     );
