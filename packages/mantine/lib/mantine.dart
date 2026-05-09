@@ -13,6 +13,12 @@ export 'src/foundation/color_utils.dart';
 // Utils
 export 'src/utils/counter.dart';
 export 'src/utils/throttled.dart';
+export 'src/utils/idle.dart';
+export 'src/utils/click_outside.dart';
+export 'src/utils/local_storage.dart';
+export 'src/utils/hotkeys.dart';
+export 'src/utils/timeout.dart';
+export 'src/utils/debounced.dart';
 
 // Theme
 export 'src/theme/mantine_theme_data.dart';
@@ -33,6 +39,7 @@ export 'src/components/text/title.dart';
 export 'src/components/data_display/badge.dart';
 export 'src/components/data_display/card.dart';
 export 'src/components/data_display/divider.dart';
+export 'src/components/data_display/kbd.dart';
 
 // Inputs
 export 'src/components/inputs/text_input.dart';
