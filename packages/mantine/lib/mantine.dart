@@ -72,6 +72,7 @@ export 'src/components/feedback/skeleton.dart';
 // Overlay
 export 'src/components/overlay/modal.dart';
 export 'src/components/overlay/popover.dart';
+export 'src/components/overlay/menu.dart';
 
 // Button
 export 'src/components/button/button.dart';

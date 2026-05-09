@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 
 import '../shared.dart';
 import 'sections/click_outside_section.dart';
+import 'sections/menu_section.dart';
 import 'sections/modal_sizes_section.dart';
 import 'sections/modal_variants_section.dart';
 import 'sections/popover_section.dart';
@@ -14,6 +15,7 @@ class OverlayScreen extends StatelessWidget {
     return const GalleryScreen(
       title: 'Overlay',
       sections: [
+        GallerySection(title: 'Menu', child: MenuSection()),
         GallerySection(title: 'Popover', child: PopoverSection()),
         GallerySection(title: 'Click outside', child: ClickOutsideSection()),
         GallerySection(title: 'Modal variants', child: ModalVariantsSection()),
