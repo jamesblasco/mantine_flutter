@@ -4,6 +4,7 @@ import '../shared.dart';
 import 'sections/card_section.dart';
 import 'sections/group_section.dart';
 import 'sections/mantine_box_section.dart';
+import 'sections/paper_section.dart';
 import 'sections/stack_section.dart';
 
 class LayoutScreen extends StatelessWidget {
@@ -17,6 +18,7 @@ class LayoutScreen extends StatelessWidget {
         GallerySection(title: 'MantineBox', child: MantineBoxSection()),
         GallerySection(title: 'MantineStack', child: StackSection()),
         GallerySection(title: 'MantineGroup', child: GroupSection()),
+        GallerySection(title: 'MantinePaper', child: PaperSection()),
         GallerySection(title: 'Card', child: CardSection()),
       ],
     );
