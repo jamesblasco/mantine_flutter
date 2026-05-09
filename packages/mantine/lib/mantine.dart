@@ -65,6 +65,7 @@ export 'src/components/inputs/segmented_control.dart';
 
 // Feedback
 export 'src/components/feedback/loader.dart';
+export 'src/components/feedback/alert.dart';
 export 'src/components/feedback/progress.dart';
 export 'src/components/feedback/skeleton.dart';
 
