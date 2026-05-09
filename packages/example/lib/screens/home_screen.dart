@@ -10,6 +10,7 @@ import 'overlay/overlay_screen.dart';
 import 'utils/utils_screen.dart';
 import 'hooks/hooks_screen.dart';
 import 'hotkeys/hotkeys_screen.dart';
+import 'navigation/navigation_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({
@@ -60,6 +61,7 @@ class _HomeContentState extends State<_HomeContent> {
     (label: 'Utils', icon: PhosphorIcons.wrench()),
     (label: 'Hooks', icon: PhosphorIcons.floppyDisk()),
     (label: 'Hotkeys', icon: PhosphorIcons.keyboard()),
+    (label: 'Navigation', icon: PhosphorIcons.compass()),
   ];
 
   static const _colorOptions = [
@@ -85,6 +87,7 @@ class _HomeContentState extends State<_HomeContent> {
       const UtilsScreen(),
       const HooksScreen(),
       const HotkeysScreen(),
+      const NavigationScreen(),
     ];
 
     return DecoratedBox(
