@@ -7,6 +7,7 @@ import 'layout_screen.dart';
 import 'inputs_screen.dart';
 import 'feedback_screen.dart';
 import 'overlay_screen.dart';
+import 'utils_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -36,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
     (label: 'Inputs', icon: PhosphorIcons.pencilSimple()),
     (label: 'Feedback', icon: PhosphorIcons.circleNotch()),
     (label: 'Overlays', icon: PhosphorIcons.appWindow()),
+    (label: 'Utils', icon: PhosphorIcons.wrench()),
   ];
 
   static const _colorOptions = [
@@ -58,6 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
       const InputsScreen(),
       const FeedbackScreen(),
       const OverlayScreen(),
+      const UtilsScreen(),
     ];
 
     return DecoratedBox(
