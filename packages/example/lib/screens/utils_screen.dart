@@ -2,14 +2,90 @@ import 'package:flutter/widgets.dart';
 import 'package:mantine/mantine.dart';
 import 'shared.dart';
 
-class UtilsScreen extends StatelessWidget {
+class UtilsScreen extends StatefulWidget {
   const UtilsScreen({super.key});
+
+  @override
+  State<UtilsScreen> createState() => _UtilsScreenState();
+}
+
+class _UtilsScreenState extends State<UtilsScreen> {
+  final _setState = MantineSetState<String>(['React', 'Angular']);
+  late final MantineInterval _interval;
+  int _seconds = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _interval = MantineInterval(const Duration(seconds: 1), () {
+      setState(() => _seconds++);
+    });
+  }
+
+  @override
+  void dispose() {
+    _setState.dispose();
+    _interval.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return GalleryScreen(
       title: 'Utilities',
       sections: [
+        GallerySection(
+          title: 'MantineSetState',
+          child: _SetStateDemo(setState: _setState),
+        ),
+        GallerySection(
+          title: 'MantineInterval',
+          child: ListenableBuilder(
+            listenable: _interval,
+            builder: (context, _) {
+              return MantineStack(
+                children: [
+                  MantineText('Seconds passed: $_seconds'),
+                  MantineText(
+                    'Interval is currently ${_interval.active ? 'active' : 'inactive'}',
+                    dimmed: true,
+                    size: MantineSize.sm,
+                  ),
+                  MantineGroup(
+                    children: [
+                      MantineButton(
+                        onPressed: _interval.active ? null : _interval.start,
+                        color: 'teal',
+                        child: const Text('Start'),
+                      ),
+                      MantineButton(
+                        onPressed: !_interval.active ? null : _interval.stop,
+                        color: 'red',
+                        child: const Text('Stop'),
+                      ),
+                      MantineButton(
+                        onPressed: _interval.toggle,
+                        variant: MantineButtonVariant.outline,
+                        child: const Text('Toggle'),
+                      ),
+                    ],
+                  ),
+                  const MantineText('Sizing variants:'),
+                  MantineGroup(
+                    align: CrossAxisAlignment.center,
+                    children: MantineSize.values.map((s) {
+                      return MantineButton(
+                        onPressed: _interval.toggle,
+                        size: s,
+                        child: Text(s.name.toUpperCase()),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
         GallerySection(
           title: 'MantineIdle',
           child: MantineIdle.wrap(
@@ -18,89 +94,167 @@ class UtilsScreen extends StatelessWidget {
           ),
         ),
         const GallerySection(
-          title: 'MantineDisclosure',
-          child: _DisclosureDemo(),
+          title: 'MantineValidatedState',
+          child: _ValidatedStateDemo(),
+        )
+        const GallerySection(
+          title: 'MantineValidatedState',
+          child: _ValidatedStateDemo(),
         ),
       ],
     );
   }
 }
 
-class _DisclosureDemo extends StatefulWidget {
-  const _DisclosureDemo();
+class _SetStateDemo extends StatefulWidget {
+  final MantineSetState<String> setState;
+  const _SetStateDemo({required this.setState});
 
   @override
-  State<_DisclosureDemo> createState() => _DisclosureDemoState();
+  State<_SetStateDemo> createState() => _SetStateDemoState();
 }
 
-class _DisclosureDemoState extends State<_DisclosureDemo> {
-  final _disclosure = MantineDisclosure(false);
+class _SetStateDemoState extends State<_SetStateDemo> {
+  final _inputController = TextEditingController();
 
   @override
   void dispose() {
-    _disclosure.dispose();
+    _inputController.dispose();
+    super.dispose();
+  }
+
+  void _addItem() {
+    final val = _inputController.text.trim();
+    if (val.isNotEmpty) {
+      widget.setState.add(val);
+      _inputController.clear();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: widget.setState,
+      builder: (context, values, _) {
+        return MantineStack(
+          children: [
+            const MantineText(
+              'Manage a unique set of items with helper methods.',
+              size: MantineSize.sm,
+              dimmed: true,
+            ),
+            MantineGroup(
+              align: CrossAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: MantineTextInput(
+                    label: 'New item',
+                    placeholder: 'Type and click Add',
+                    controller: _inputController,
+                  ),
+                ),
+                MantineButton(
+                  onPressed: _addItem,
+                  child: const Text('Add'),
+                ),
+              ],
+            ),
+            if (values.isNotEmpty) ...[
+              const MantineText('Active items (click to remove):',
+                  size: MantineSize.xs, weight: FontWeight.bold),
+              MantineGroup(
+                children: values.map((item) {
+                  return GestureDetector(
+                    onTap: () => widget.setState.remove(item),
+                    child: MantineBadge(
+                      size: MantineSize.md,
+                      child: Text(item),
+                    ),
+                  );
+                }).toList(),
+              ),
+              MantineButton(
+                variant: MantineButtonVariant.subtle,
+                color: 'red',
+                size: MantineSize.xs,
+                onPressed: () => widget.setState.clear(),
+                child: const Text('Clear all'),
+              ),
+            ] else
+              const MantineText(
+                'Set is empty. Add some items above.',
+                dimmed: true,
+                size: MantineSize.sm,
+              ),
+            const MantineDivider(),
+            const MantineText('Quick toggle:',
+                size: MantineSize.xs, weight: FontWeight.bold),
+            MantineGroup(
+              children: ['Flutter', 'Vue', 'Svelte'].map((item) {
+                final isActive = values.contains(item);
+                return MantineButton(
+                  variant: isActive
+                      ? MantineButtonVariant.filled
+                      : MantineButtonVariant.outline,
+                  size: MantineSize.xs,
+                  onPressed: () => widget.setState.toggle(item),
+                  child: Text(item),
+                );
+              }).toList(),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _ValidatedStateDemo extends StatefulWidget {
+  const _ValidatedStateDemo();
+
+  @override
+  State<_ValidatedStateDemo> createState() => _ValidatedStateDemoState();
+}
+
+class _ValidatedStateDemoState extends State<_ValidatedStateDemo> {
+  final emailState = MantineValidatedState<String>(
+    '',
+    (value) => value.isEmpty
+        ? 'Email is required'
+        : !value.contains('@')
+            ? 'Invalid email'
+            : null,
+  );
+
+  @override
+  void dispose() {
+    emailState.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MantineStack(
-      children: [
-        MantineGroup(
+    return ListenableBuilder(
+      listenable: emailState,
+      builder: (context, _) {
+        return MantineStack(
           children: [
-            MantineButton(
-              onPressed: _disclosure.open,
-              child: const Text('Open'),
+            const MantineText(
+              'Enter a valid email address to clear the error state.',
+              size: MantineSize.sm,
+              dimmed: true,
             ),
-            MantineButton(
-              onPressed: _disclosure.close,
-              variant: MantineButtonVariant.outline,
-              child: const Text('Close'),
-            ),
-            MantineButton(
-              onPressed: _disclosure.toggle,
-              variant: MantineButtonVariant.light,
-              child: const Text('Toggle'),
-            ),
+            ...MantineSize.values.map((size) => MantineTextInput(
+                  label: 'Email (${size.name})',
+                  placeholder: 'hello@mantine.dev',
+                  value: emailState.value,
+                  error: emailState.error,
+                  size: size,
+                  onChanged: emailState.set,
+                )),
           ],
-        ),
-        ValueListenableBuilder(
-          valueListenable: _disclosure,
-          builder: (context, opened, _) {
-            if (!opened) {
-              return const MantineText(
-                'Disclosure is closed. Click "Open" or "Toggle" to reveal content.',
-                dimmed: true,
-                size: MantineSize.sm,
-              );
-            }
-
-            return MantineCard(
-              withBorder: true,
-              shadow: MantineSize.sm,
-              padding: MantineSize.md,
-              child: MantineStack(
-                children: [
-                  const MantineText(
-                    'Disclosure Content',
-                    weight: FontWeight.bold,
-                  ),
-                  const MantineText(
-                    'This content is only visible when the disclosure is open.',
-                    size: MantineSize.sm,
-                  ),
-                  MantineButton(
-                    onPressed: _disclosure.close,
-                    color: 'red',
-                    size: MantineSize.xs,
-                    child: const Text('Close from inside'),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      ],
+        );
+      },
     );
   }
 }
