@@ -14,6 +14,7 @@ class _HooksScreenState extends State<HooksScreen> {
   late final MantineLocalStorage<String> _textStorage;
   late final MantineLocalStorage<int> _counterStorage;
   late final MantineLocalStorage<bool> _boolStorage;
+  late final MantineListState<({String id, String label, bool active})> _listState;
   late final MantineMapState<String, String> _mapState;
 
   @override
@@ -35,6 +36,11 @@ class _HooksScreenState extends State<HooksScreen> {
       defaultValue: false,
       backend: backend,
     );
+    _listState = MantineListState([
+      (id: '1', label: 'First item', active: true),
+      (id: '2', label: 'Second item', active: false),
+      (id: '3', label: 'Third item', active: false),
+    ]);
     _mapState = MantineMapState<String, String>({
       'Apple': 'Red',
       'Banana': 'Yellow',
@@ -46,6 +52,7 @@ class _HooksScreenState extends State<HooksScreen> {
     _textStorage.dispose();
     _counterStorage.dispose();
     _boolStorage.dispose();
+    _listState.dispose();
     _mapState.dispose();
     super.dispose();
   }
@@ -171,6 +178,132 @@ class _HooksScreenState extends State<HooksScreen> {
                     onChanged: (v) => _boolStorage.value = v,
                   );
                 },
+              ),
+
+              const MantineDivider(),
+
+              GallerySection(
+                title: 'MantineListState',
+                child: ValueListenableBuilder(
+                  valueListenable: _listState,
+                  builder: (context, list, _) {
+                    final theme = context.mantineTheme;
+                    final isDark = context.isDarkMode;
+
+                    return MantineStack(
+                      children: [
+                        const MantineText(
+                          'Manage list state with named mutation methods.',
+                          dimmed: true,
+                          size: MantineSize.sm,
+                        ),
+                        MantineGroup(
+                          children: [
+                            MantineButton(
+                              size: MantineSize.xs,
+                              onPressed: () => _listState.prepend((
+                                id: DateTime.now().toString(),
+                                label: 'Prepended Item',
+                                active: false,
+                              )),
+                              child: const Text('Prepend'),
+                            ),
+                            MantineButton(
+                              size: MantineSize.sm,
+                              onPressed: () => _listState.append((
+                                id: DateTime.now().toString(),
+                                label: 'Appended Item',
+                                active: false,
+                              )),
+                              child: const Text('Append'),
+                            ),
+                            MantineButton(
+                              size: MantineSize.md,
+                              variant: MantineButtonVariant.outline,
+                              onPressed: () => _listState.filter((item) => item.active),
+                              child: const Text('Filter Active'),
+                            ),
+                            MantineButton(
+                              size: MantineSize.lg,
+                              variant: MantineButtonVariant.outline,
+                              onPressed: () => _listState.setAll([
+                                (id: '1', label: 'Reset Item 1', active: true),
+                                (id: '2', label: 'Reset Item 2', active: false),
+                              ]),
+                              child: const Text('Reset List'),
+                            ),
+                          ],
+                        ),
+                        MantineStack(
+                          spacingValue: 4,
+                          children: list.asMap().entries.map((entry) {
+                            final index = entry.key;
+                            final item = entry.value;
+
+                            return DecoratedBox(
+                              decoration: BoxDecoration(
+                                color: isDark ? MantineColors.dark[6] : MantineColors.gray[0],
+                                border: Border.all(
+                                  color: item.active
+                                      ? theme.primaryColorScale[isDark ? 8 : 4]
+                                      : context.mantineBorder,
+                                ),
+                                borderRadius: BorderRadius.circular(theme.radius.sm),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    MantineCheckbox(
+                                      checked: item.active,
+                                      onChanged: (v) => _listState.applyWhere(
+                                        (i) => i.id == item.id,
+                                        (i) => (id: i.id, label: i.label, active: v),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: MantineText(
+                                        item.label,
+                                        weight: item.active ? FontWeight.bold : FontWeight.normal,
+                                      ),
+                                    ),
+                                    MantineGroup(
+                                      spacingValue: 4,
+                                      children: [
+                                        if (index > 0)
+                                          MantineActionIcon(
+                                            size: MantineSize.sm,
+                                            variant: MantineButtonVariant.subtle,
+                                            onPressed: () => _listState.reorder(index, index - 1),
+                                            child: const Text('↑'),
+                                          ),
+                                        if (index < list.length - 1)
+                                          MantineActionIcon(
+                                            size: MantineSize.sm,
+                                            variant: MantineButtonVariant.subtle,
+                                            onPressed: () => _listState.reorder(index, index + 1),
+                                            child: const Text('↓'),
+                                          ),
+                                        MantineActionIcon(
+                                          size: MantineSize.sm,
+                                          variant: MantineButtonVariant.subtle,
+                                          color: 'red',
+                                          onPressed: () => _listState.remove(index),
+                                          child: const Text('×'),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    );
+                  },
+                ),
               ),
 
               const MantineDivider(),
