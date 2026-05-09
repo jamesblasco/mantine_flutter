@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:mantine/mantine.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'shared.dart';
 
 class ButtonsScreen extends StatelessWidget {
@@ -89,6 +90,80 @@ class ButtonsScreen extends StatelessWidget {
             onPressed: () {},
             fullWidth: true,
             child: const Text('Full width button'),
+          ),
+        ),
+        GallerySection(
+          title: 'ActionIcon variants',
+          child: MantineGroup(
+            wrap: true,
+            children: [
+              MantineActionIcon(
+                  onPressed: () {}, child: PhosphorIcon(PhosphorIcons.heart())),
+              MantineActionIcon(
+                  onPressed: () {},
+                  variant: MantineButtonVariant.outline,
+                  child: PhosphorIcon(PhosphorIcons.heart())),
+              MantineActionIcon(
+                  onPressed: () {},
+                  variant: MantineButtonVariant.light,
+                  child: PhosphorIcon(PhosphorIcons.heart())),
+              MantineActionIcon(
+                  onPressed: () {},
+                  variant: MantineButtonVariant.subtle,
+                  child: PhosphorIcon(PhosphorIcons.heart())),
+              MantineActionIcon(
+                  onPressed: () {},
+                  variant: MantineButtonVariant.transparent,
+                  child: PhosphorIcon(PhosphorIcons.heart())),
+              MantineActionIcon(
+                  onPressed: () {},
+                  variant: MantineButtonVariant.white,
+                  child: PhosphorIcon(PhosphorIcons.heart())),
+              MantineActionIcon(
+                  onPressed: () {},
+                  variant: MantineButtonVariant.gradient,
+                  child: PhosphorIcon(PhosphorIcons.heart())),
+            ],
+          ),
+        ),
+        GallerySection(
+          title: 'ActionIcon sizes',
+          child: MantineGroup(
+            wrap: true,
+            align: CrossAxisAlignment.center,
+            children: MantineSize.values
+                .map((s) => MantineActionIcon(
+                    onPressed: () {},
+                    size: s,
+                    child: PhosphorIcon(PhosphorIcons.heart())))
+                .toList(),
+          ),
+        ),
+        GallerySection(
+          title: 'ActionIcon states',
+          child: MantineGroup(
+            wrap: true,
+            align: CrossAxisAlignment.center,
+            children: [
+              MantineActionIcon(
+                onPressed: () {},
+                child: PhosphorIcon(PhosphorIcons.heart()),
+              ),
+              MantineActionIcon(
+                onPressed: () {},
+                loading: true,
+                child: PhosphorIcon(PhosphorIcons.heart()),
+              ),
+              MantineActionIcon(
+                onPressed: null,
+                child: PhosphorIcon(PhosphorIcons.heart()),
+              ),
+              MantineActionIcon(
+                onPressed: () {},
+                disabled: true,
+                child: PhosphorIcon(PhosphorIcons.heart()),
+              ),
+            ],
           ),
         ),
       ],
