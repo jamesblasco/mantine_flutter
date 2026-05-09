@@ -5,6 +5,7 @@ import 'sections/checkbox_section.dart';
 import 'sections/counter_section.dart';
 import 'sections/debounced_section.dart';
 import 'sections/radio_section.dart';
+import 'sections/select_section.dart';
 import 'sections/number_input_section.dart';
 import 'sections/segmented_control_section.dart';
 import 'sections/switch_section.dart';
@@ -25,6 +26,7 @@ class InputsScreen extends StatelessWidget {
         GallerySection(title: 'Textarea', child: TextareaSection()),
         GallerySection(title: 'Checkbox', child: CheckboxSection()),
         GallerySection(title: 'Radio', child: RadioSection()),
+        GallerySection(title: 'Select', child: SelectSection()),
         GallerySection(title: 'Switch', child: SwitchSection()),
         GallerySection(
             title: 'SegmentedControl', child: SegmentedControlSection()),

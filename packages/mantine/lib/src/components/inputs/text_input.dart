@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import '../../foundation/size.dart';
 import '../../theme/context_extensions.dart';
@@ -30,6 +31,8 @@ class MantineTextInput extends StatefulWidget {
     this.maxLines = 1,
     this.maxLength,
     this.autofocus = false,
+    this.readOnly = false,
+    this.onTap,
   });
 
   final String? label;
@@ -53,6 +56,8 @@ class MantineTextInput extends StatefulWidget {
   final int? maxLines;
   final int? maxLength;
   final bool autofocus;
+  final bool readOnly;
+  final VoidCallback? onTap;
 
   @override
   State<MantineTextInput> createState() => _MantineTextInputState();
@@ -181,7 +186,7 @@ class _MantineTextInputState extends State<MantineTextInput> {
             EditableText(
               controller: _controller,
               focusNode: _focusNode,
-              readOnly: widget.disabled,
+              readOnly: widget.disabled || widget.readOnly,
               style: textStyle,
               cursorColor: theme.primaryColorValue,
               backgroundCursorColor: const Color(0xFF888888),
@@ -189,6 +194,10 @@ class _MantineTextInputState extends State<MantineTextInput> {
               obscureText: widget.obscureText,
               maxLines: widget.obscureText ? 1 : widget.maxLines,
               autofocus: widget.autofocus,
+              inputFormatters: [
+                if (widget.maxLength != null)
+                  LengthLimitingTextInputFormatter(widget.maxLength),
+              ],
               onChanged: (v) {
                 _state.handleChange(v);
               },
@@ -198,29 +207,33 @@ class _MantineTextInputState extends State<MantineTextInput> {
       },
     );
 
-    Widget wrapper = DecoratedBox(
-      decoration: widget.variant == MantineInputVariant.unstyled
-          ? const BoxDecoration()
-          : BoxDecoration(
-              color: bgColor,
-              borderRadius: BorderRadius.circular(resolvedRadius),
-              border: Border.all(
-                  color: borderColor, width: _focused ? 1.5 : 1),
-            ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        child: Row(
-          children: [
-            if (widget.leftSection != null) ...[
-              widget.leftSection!,
-              const SizedBox(width: 8),
+    Widget wrapper = GestureDetector(
+      onTap: widget.disabled ? null : widget.onTap,
+      behavior: HitTestBehavior.opaque,
+      child: DecoratedBox(
+        decoration: widget.variant == MantineInputVariant.unstyled
+            ? const BoxDecoration()
+            : BoxDecoration(
+                color: bgColor,
+                borderRadius: BorderRadius.circular(resolvedRadius),
+                border: Border.all(
+                    color: borderColor, width: _focused ? 1.5 : 1),
+              ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Row(
+            children: [
+              if (widget.leftSection != null) ...[
+                widget.leftSection!,
+                const SizedBox(width: 8),
+              ],
+              Expanded(child: editableText),
+              if (widget.rightSection != null) ...[
+                const SizedBox(width: 8),
+                widget.rightSection!,
+              ],
             ],
-            Expanded(child: editableText),
-            if (widget.rightSection != null) ...[
-              const SizedBox(width: 8),
-              widget.rightSection!,
-            ],
-          ],
+          ),
         ),
       ),
     );
