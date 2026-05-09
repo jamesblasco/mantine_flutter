@@ -19,6 +19,7 @@ export 'src/utils/local_storage.dart';
 export 'src/utils/hotkeys.dart';
 export 'src/utils/timeout.dart';
 export 'src/utils/debounced.dart';
+export 'src/utils/toggle.dart';
 export 'src/utils/queue.dart';
 export 'src/utils/disclosure.dart';
 export 'src/utils/list_state.dart';

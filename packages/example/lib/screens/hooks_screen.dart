@@ -14,6 +14,7 @@ class _HooksScreenState extends State<HooksScreen> {
   late final MantineLocalStorage<String> _textStorage;
   late final MantineLocalStorage<int> _counterStorage;
   late final MantineLocalStorage<bool> _boolStorage;
+  late final MantineToggle<String> _toggle;
   late final MantineListState<({String id, String label, bool active})> _listState;
   late final MantineMapState<String, String> _mapState;
 
@@ -36,6 +37,7 @@ class _HooksScreenState extends State<HooksScreen> {
       defaultValue: false,
       backend: backend,
     );
+    _toggle = MantineToggle('Blue', 'Red');
     _listState = MantineListState([
       (id: '1', label: 'First item', active: true),
       (id: '2', label: 'Second item', active: false),
@@ -52,6 +54,7 @@ class _HooksScreenState extends State<HooksScreen> {
     _textStorage.dispose();
     _counterStorage.dispose();
     _boolStorage.dispose();
+    _toggle.dispose();
     _listState.dispose();
     _mapState.dispose();
     super.dispose();
@@ -181,6 +184,40 @@ class _HooksScreenState extends State<HooksScreen> {
               ),
 
               const MantineDivider(),
+              GallerySection(
+                title: 'MantineToggle',
+                child: ValueListenableBuilder(
+                  valueListenable: _toggle,
+                  builder: (context, value, _) {
+                    final color =
+                        value == 'Blue' ? 'blue' : 'red';
+                    return MantineStack(
+                      children: [
+                        MantineText('Current value: $value'),
+                        MantineGroup(
+                          children: [
+                            MantineButton(
+                              onPressed: _toggle.toggle,
+                              color: color,
+                              child: const Text('Toggle'),
+                            ),
+                            MantineButton(
+                              onPressed: () => _toggle.set('Blue'),
+                              variant: MantineButtonVariant.outline,
+                              child: const Text('Set Blue'),
+                            ),
+                            MantineButton(
+                              onPressed: () => _toggle.set('Red'),
+                              variant: MantineButtonVariant.outline,
+                              child: const Text('Set Red'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
 
               GallerySection(
                 title: 'MantineListState',
