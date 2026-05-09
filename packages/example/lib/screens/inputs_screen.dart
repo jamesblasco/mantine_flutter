@@ -17,8 +17,7 @@ class _InputsScreenState extends State<InputsScreen> {
   bool _switch2 = true;
   String _inputValue = '';
   final _counter = MantineCounter(0, min: 0, max: 10);
-  final _throttledCounter =
-      MantineThrottled<int>(0, duration: const Duration(seconds: 1));
+  final _throttledCounter = MantineThrottled<int>(0, duration: const Duration(seconds: 1));
   final _debounced = MantineDebounced<String>('', delay: const Duration(milliseconds: 500));
 
   @override
@@ -70,8 +69,7 @@ class _InputsScreenState extends State<InputsScreen> {
                   variant: MantineInputVariant.filled,
                 ),
                 if (_inputValue.isNotEmpty)
-                  MantineText('Value: $_inputValue', size: MantineSize.sm,
-                      dimmed: true),
+                  MantineText('Value: $_inputValue', size: MantineSize.sm, dimmed: true),
               ],
             ),
           ),
@@ -212,18 +210,15 @@ class _InputsScreenState extends State<InputsScreen> {
               return MantineStack(
                 align: CrossAxisAlignment.start,
                 children: [
-                  MantineText(
-                      'Count (throttled 1s): $value (Updates only once per second)'),
+                  MantineText('Count (throttled 1s): $value (Updates only once per second)'),
                   MantineGroup(
                     children: [
                       MantineButton(
-                        onPressed: () =>
-                            _throttledCounter.value = _throttledCounter.value - 1,
+                        onPressed: () => _throttledCounter.value = _throttledCounter.value - 1,
                         child: const Text('-'),
                       ),
                       MantineButton(
-                        onPressed: () =>
-                            _throttledCounter.value = _throttledCounter.value + 1,
+                        onPressed: () => _throttledCounter.value = _throttledCounter.value + 1,
                         child: const Text('+'),
                       ),
                     ],
@@ -232,15 +227,13 @@ class _InputsScreenState extends State<InputsScreen> {
                   ...MantineSize.values.map((s) => MantineGroup(
                         children: [
                           MantineButton(
-                            onPressed: () => _throttledCounter.value =
-                                _throttledCounter.value - 1,
+                            onPressed: () => _throttledCounter.value = _throttledCounter.value - 1,
                             size: s,
                             child: const Text('-'),
                           ),
                           MantineText('$value', size: s),
                           MantineButton(
-                            onPressed: () => _throttledCounter.value =
-                                _throttledCounter.value + 1,
+                            onPressed: () => _throttledCounter.value = _throttledCounter.value + 1,
                             size: s,
                             child: const Text('+'),
                           ),
@@ -249,9 +242,9 @@ class _InputsScreenState extends State<InputsScreen> {
                 ],
               );
             },
-             ),
+          ),
         ),
-            GallerySection(
+        GallerySection(
           title: 'Debounced (MantineDebounced)',
           child: MantineStack(
             align: CrossAxisAlignment.start,
