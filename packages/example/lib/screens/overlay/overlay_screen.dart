@@ -4,6 +4,7 @@ import '../shared.dart';
 import 'sections/click_outside_section.dart';
 import 'sections/modal_sizes_section.dart';
 import 'sections/modal_variants_section.dart';
+import 'sections/popover_section.dart';
 
 class OverlayScreen extends StatelessWidget {
   const OverlayScreen({super.key});
@@ -13,6 +14,7 @@ class OverlayScreen extends StatelessWidget {
     return const GalleryScreen(
       title: 'Overlay',
       sections: [
+        GallerySection(title: 'Popover', child: PopoverSection()),
         GallerySection(title: 'Click outside', child: ClickOutsideSection()),
         GallerySection(title: 'Modal variants', child: ModalVariantsSection()),
         GallerySection(title: 'Sizes', child: ModalSizesSection()),

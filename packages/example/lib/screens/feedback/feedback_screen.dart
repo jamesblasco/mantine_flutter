@@ -7,7 +7,12 @@ import 'sections/loader_bars_section.dart';
 import 'sections/loader_colors_section.dart';
 import 'sections/loader_dots_section.dart';
 import 'sections/loader_oval_section.dart';
+import 'sections/skeleton_section.dart';
 import 'sections/timeout_section.dart';
+import 'sections/progress_basic_section.dart';
+import 'sections/progress_colors_section.dart';
+import 'sections/progress_striped_section.dart';
+import 'sections/progress_multi_section.dart';
 
 class FeedbackScreen extends StatelessWidget {
   const FeedbackScreen({super.key});
@@ -26,7 +31,12 @@ class FeedbackScreen extends StatelessWidget {
           title: 'Button loading states',
           child: ButtonLoadingStatesSection(),
         ),
+        GallerySection(title: 'Skeleton', child: SkeletonSection()),
         GallerySection(title: 'MantineTimeout', child: TimeoutSection()),
+        GallerySection(title: 'Progress — Basic', child: ProgressBasicSection()),
+        GallerySection(title: 'Progress — Colors', child: ProgressColorsSection()),
+        GallerySection(title: 'Progress — Striped', child: ProgressStripedSection()),
+        GallerySection(title: 'Progress — Multi-section', child: ProgressMultiSection()),
       ],
     );
   }

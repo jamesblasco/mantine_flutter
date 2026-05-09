@@ -41,12 +41,14 @@ export 'src/components/layout/box.dart';
 export 'src/components/layout/stack.dart';
 export 'src/components/layout/group.dart';
 export 'src/components/layout/container.dart';
+export 'src/components/layout/paper.dart';
 
 // Typography
 export 'src/components/text/text.dart';
 export 'src/components/text/title.dart';
 
 // Data Display
+export 'src/components/data_display/avatar.dart';
 export 'src/components/data_display/badge.dart';
 export 'src/components/data_display/card.dart';
 export 'src/components/data_display/divider.dart';
@@ -54,15 +56,22 @@ export 'src/components/data_display/kbd.dart';
 
 // Inputs
 export 'src/components/inputs/text_input.dart';
+export 'src/components/inputs/number_input.dart';
+export 'src/components/inputs/textarea.dart';
 export 'src/components/inputs/checkbox.dart';
 export 'src/components/inputs/switch.dart';
+export 'src/components/inputs/radio.dart';
+export 'src/components/inputs/segmented_control.dart';
 
 // Feedback
 export 'src/components/feedback/loader.dart';
 export 'src/components/feedback/alert.dart';
+export 'src/components/feedback/progress.dart';
+export 'src/components/feedback/skeleton.dart';
 
 // Overlay
 export 'src/components/overlay/modal.dart';
+export 'src/components/overlay/popover.dart';
 
 // Button
 export 'src/components/button/button.dart';

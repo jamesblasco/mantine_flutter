@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import '../shared.dart';
+import 'sections/avatar_section.dart';
 import 'sections/badge_divider_section.dart';
 import 'sections/headings_section.dart';
 import 'sections/styles_section.dart';
@@ -20,6 +21,7 @@ class TypographyScreen extends StatelessWidget {
         GallerySection(title: 'Styles', child: StylesSection()),
         GallerySection(title: 'Truncation', child: TruncationSection()),
         GallerySection(title: 'Badge & Divider', child: BadgeDividerSection()),
+        GallerySection(title: 'Avatar', child: AvatarSection()),
       ],
     );
   }
