@@ -185,7 +185,6 @@ class _MantineTextareaState extends State<MantineTextarea> {
               backgroundCursorColor: const Color(0xFF888888),
               keyboardType: TextInputType.multiline,
               maxLines: null,
-              maxLength: widget.maxLength,
               autofocus: widget.autofocus,
               onChanged: (v) {
                 _state.handleChange(v);
