@@ -43,6 +43,7 @@ export 'src/components/layout/stack.dart';
 export 'src/components/layout/group.dart';
 export 'src/components/layout/container.dart';
 export 'src/components/layout/paper.dart';
+export 'src/components/layout/app_shell.dart';
 
 // Typography
 export 'src/components/text/text.dart';
