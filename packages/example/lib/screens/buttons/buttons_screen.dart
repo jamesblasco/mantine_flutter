@@ -4,6 +4,7 @@ import '../shared.dart';
 import 'sections/action_icon_sizes_section.dart';
 import 'sections/action_icon_states_section.dart';
 import 'sections/action_icon_variants_section.dart';
+import 'sections/close_button_section.dart';
 import 'sections/button_colors_section.dart';
 import 'sections/button_full_width_section.dart';
 import 'sections/button_sizes_section.dart';
@@ -34,6 +35,10 @@ class ButtonsScreen extends StatelessWidget {
         GallerySection(
           title: 'ActionIcon states',
           child: ActionIconStatesSection(),
+        ),
+        GallerySection(
+          title: 'CloseButton',
+          child: CloseButtonSection(),
         ),
       ],
     );

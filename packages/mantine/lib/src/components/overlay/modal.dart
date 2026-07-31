@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import '../../foundation/size.dart';
 import '../../theme/context_extensions.dart';
+import '../button/close_button.dart';
 
 Future<T?> showMantineModal<T>({
   required BuildContext context,
@@ -242,15 +243,9 @@ class _ModalHeader extends StatelessWidget {
           else
             const Spacer(),
           if (withCloseButton)
-            GestureDetector(
-              onTap: onClose,
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: Padding(
-                  padding: const EdgeInsets.all(4),
-                  child: _CloseIcon(color: context.mantineDimmedText),
-                ),
-              ),
+            MantineCloseButton(
+              onPressed: onClose,
+              color: 'gray',
             ),
         ],
       ),
@@ -258,35 +253,3 @@ class _ModalHeader extends StatelessWidget {
   }
 }
 
-class _CloseIcon extends StatelessWidget {
-  const _CloseIcon({required this.color});
-
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      size: const Size(18, 18),
-      painter: _CrossPainter(color: color),
-    );
-  }
-}
-
-class _CrossPainter extends CustomPainter {
-  const _CrossPainter({required this.color});
-
-  final Color color;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..strokeWidth = 2
-      ..strokeCap = StrokeCap.round;
-    canvas.drawLine(Offset(0, 0), Offset(size.width, size.height), paint);
-    canvas.drawLine(Offset(size.width, 0), Offset(0, size.height), paint);
-  }
-
-  @override
-  bool shouldRepaint(_CrossPainter old) => old.color != color;
-}
