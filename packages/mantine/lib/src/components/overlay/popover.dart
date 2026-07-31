@@ -35,6 +35,8 @@ class MantinePopover extends StatefulWidget {
     this.arrowRadius = 0.0,
     this.dropdownPadding,
     this.barrierDismissible = true,
+    this.backgroundColor,
+    this.textColor,
   });
 
   final bool opened;
@@ -52,6 +54,8 @@ class MantinePopover extends StatefulWidget {
   final double arrowRadius;
   final EdgeInsetsGeometry? dropdownPadding;
   final bool barrierDismissible;
+  final Color? backgroundColor;
+  final Color? textColor;
 
   @override
   State<MantinePopover> createState() => _MantinePopoverState();
@@ -130,6 +134,8 @@ class _MantinePopoverState extends State<MantinePopover> {
             arrowOffset: widget.arrowOffset,
             arrowRadius: widget.arrowRadius,
             dropdownPadding: widget.dropdownPadding,
+            backgroundColor: widget.backgroundColor,
+            textColor: widget.textColor,
             child: widget.content,
           ),
         ],
@@ -159,6 +165,8 @@ class _PopoverDropdown extends StatelessWidget {
     required this.arrowOffset,
     required this.arrowRadius,
     required this.dropdownPadding,
+    required this.backgroundColor,
+    required this.textColor,
     required this.child,
   });
 
@@ -173,6 +181,8 @@ class _PopoverDropdown extends StatelessWidget {
   final double arrowOffset;
   final double arrowRadius;
   final EdgeInsetsGeometry? dropdownPadding;
+  final Color? backgroundColor;
+  final Color? textColor;
   final Widget child;
 
   Alignment _getTargetAnchor() {
@@ -234,13 +244,14 @@ class _PopoverDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.mantineTheme;
     final resolvedRadius = theme.radius.resolve(radius ?? theme.defaultRadius);
-    final backgroundColor = context.mantineSurface;
+    final effectiveBackgroundColor = backgroundColor ?? context.mantineSurface;
+    final effectiveTextColor = textColor ?? context.mantineBodyText;
     final shadowValue = theme.shadows.resolve(shadow);
     final padding = dropdownPadding ?? EdgeInsets.all(theme.spacing.resolve(size));
 
     Widget dropdown = Container(
       decoration: BoxDecoration(
-        color: backgroundColor,
+        color: effectiveBackgroundColor,
         borderRadius: BorderRadius.circular(resolvedRadius),
         boxShadow: shadowValue,
         border: Border.all(
@@ -253,7 +264,7 @@ class _PopoverDropdown extends StatelessWidget {
       padding: padding,
       child: DefaultTextStyle(
         style: TextStyle(
-          color: context.mantineBodyText,
+          color: effectiveTextColor,
           fontSize: 14,
           fontFamily: theme.typography.fontFamily,
         ),
@@ -274,7 +285,7 @@ class _PopoverDropdown extends StatelessWidget {
             child: _PopoverArrow(
               position: position,
               size: arrowSize,
-              color: backgroundColor,
+              color: effectiveBackgroundColor,
               borderColor: context.isDarkMode
                   ? const Color(0xFF373A40)
                   : const Color(0xFFE9ECEF),
