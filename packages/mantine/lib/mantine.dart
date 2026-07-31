@@ -77,3 +77,6 @@ export 'src/components/overlay/popover.dart';
 // Button
 export 'src/components/button/button.dart';
 export 'src/components/button/action_icon.dart';
+
+// Navigation
+export 'src/components/navigation/breadcrumbs.dart';
